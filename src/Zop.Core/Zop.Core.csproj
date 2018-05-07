@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <Version>2.0.0.10504</Version>
+    <Description>Zop Orleans 服务核心库 领域实体 应用服务 仓储</Description>
+    <RootNamespace>Zop</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CompareNETObjects" Version="4.52.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Zop\Zop.csproj" />
+  </ItemGroup>
+
+</Project>

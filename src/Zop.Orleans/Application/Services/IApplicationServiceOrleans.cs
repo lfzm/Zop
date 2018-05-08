@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Orleans;
 using System.Text;
 using System.Threading.Tasks;
+using Orleans.Concurrency;
 
 namespace Zop.Application.Services
 {
@@ -16,6 +17,7 @@ namespace Zop.Application.Services
         /// 获取应用服务的状态
         /// </summary>
         /// <returns>返回状态</returns>
+        [AlwaysInterleave]
         Task<TState> ReadState();
 
         /// <summary>

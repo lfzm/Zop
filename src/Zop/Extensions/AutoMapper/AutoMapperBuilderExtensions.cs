@@ -71,15 +71,16 @@ namespace Microsoft.Extensions.DependencyInjection
             assemblys.Add(assembly.GetName());
 
             //获取所有IProfile实现类
-            IEnumerable<TypeInfo> allType = assemblys
-                    .Select(f => Assembly.Load(f))
-                    .SelectMany(y => y.DefinedTypes)
-                    .Where(type => typeof(Profile).GetTypeInfo().IsAssignableFrom(type.AsType()) && !type.IsAbstract && type.Module.Name != "AutoMapper.dll");
+            IEnumerable<Type> allType = assemblys
+                   .Select(f => Assembly.Load(f))
+                   .SelectMany(y => y.ExportedTypes)
+                   .Where(type => typeof(Profile).GetTypeInfo().IsAssignableFrom(type) && !type.IsAbstract && type.Module.Name != "AutoMapper.dll")
+                   .ToList();
 
-            foreach (var typeInfo in allType)
+            foreach (var type in allType)
             {
                 //注册映射
-                config.AddProfiles(typeInfo); // Initialise each Profile classe
+                config.AddProfiles(type); // Initialise each Profile classe
             }
         }
 

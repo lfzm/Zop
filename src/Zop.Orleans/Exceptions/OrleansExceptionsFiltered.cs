@@ -1,4 +1,5 @@
-﻿using Orleans;
+﻿using Microsoft.Extensions.Logging;
+using Orleans;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,6 +12,13 @@ namespace Zop.Exceptions
     /// </summary>
     public class OrleansExceptionsFiltered : IIncomingGrainCallFilter
     {
+        private readonly ILogger Logger;
+
+        public OrleansExceptionsFiltered(ILogger<OrleansExceptionsFiltered> _logger)
+        {
+            this.Logger = _logger;
+        }
+
         public async Task Invoke(IIncomingGrainCallContext context)
         {
             try
@@ -19,6 +27,7 @@ namespace Zop.Exceptions
             }
             catch (Exception ex)
             {
+                this.Logger.LogError(ex, context.Grain.GetType().Name);
                 Exception InnerEx= ex.InnerException;
                 while (true)
                 {

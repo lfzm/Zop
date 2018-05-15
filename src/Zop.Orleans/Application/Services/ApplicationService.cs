@@ -40,16 +40,22 @@ namespace Zop.Application.Services
             }
         }
         ///<inheritdoc/>
-        public Task<TState> ReadState()
+        public Task<TState> ReadAsync()
         {
             return Task.FromResult(base.State);
         }
-       
+
         ///<inheritdoc/>
-        public Task ClearState()
+        public Task ClearAsync()
         {
             base.ClearStateAsync();
             return Task.CompletedTask;
+        }
+        ///<inheritdoc/>
+        public Task WriteAsync(TState state)
+        {
+            base.State = state;
+            return base.WriteStateAsync();
         }
     }
     public class AuthorizeConstant

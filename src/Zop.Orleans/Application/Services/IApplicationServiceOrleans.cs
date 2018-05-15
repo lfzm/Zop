@@ -18,13 +18,20 @@ namespace Zop.Application.Services
         /// </summary>
         /// <returns>返回状态</returns>
         [AlwaysInterleave]
-        Task<TState> ReadState();
+        Task<TState> ReadAsync();
+
+        /// <summary>
+        /// 修改实体
+        /// </summary>
+        /// <param name="state"></param>
+        /// <returns></returns>
+        Task WriteAsync(TState state);
 
         /// <summary>
         /// 清除应用服务的状态
         /// </summary>
         /// <returns></returns>
-        Task ClearState();
+        Task ClearAsync();
 
     }
 }

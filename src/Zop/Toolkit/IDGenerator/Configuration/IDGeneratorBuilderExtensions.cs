@@ -19,7 +19,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddIDGenerator(this IServiceCollection services)
         {
             services.AddSingleton<IWorkerOpation, WorkerOpation>();
-            services.AddSingleton<IIDGenerated, IdWorker>();
+            services.AddTransient<IIDGenerated, IdWorker>();
             return services;
         }
     }

@@ -7,8 +7,8 @@ using Orleans.Runtime;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
 using System.Threading.Tasks;
+using Zop.OrleansClient.Configuration;
 
 namespace Zop.OrleansClient.AccessToken
 {
@@ -17,11 +17,11 @@ namespace Zop.OrleansClient.AccessToken
     /// </summary>
     public class UserAccessTokenService : IAccessTokenService
     {
-        private readonly OrleansClientOptions options;
+        private readonly OrleansAuthOptions options;
         private readonly ILogger logger;
         private readonly IHttpContextAccessor httpContextAccessor;
         public UserAccessTokenService(
-            IOptions<OrleansClientOptions> _options,
+            IOptions<OrleansAuthOptions> _options,
             ILogger<UserAccessTokenService> _logger,
             IHttpContextAccessor _httpContextAccessor)
         {

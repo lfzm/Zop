@@ -2,9 +2,8 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
+using Zop.OrleansClient.Configuration;
 
 namespace Zop.OrleansClient.AccessToken
 {
@@ -15,14 +14,14 @@ namespace Zop.OrleansClient.AccessToken
     {
         private DateTime expirationTime = DateTime.MinValue;
         private string accessToken;
-        private readonly OrleansClientOptions options;
+        private readonly OrleansAuthOptions options;
         private readonly ILogger logger;
         /// <summary>
         /// 客户端访问令牌
         /// </summary>
         /// <param name="_options"></param>
         /// <param name="_logger"></param>
-        public ClientAccessTokenService(IOptions<OrleansClientOptions> _options, ILogger<ClientAccessTokenService> _logger)
+        public ClientAccessTokenService(IOptions<OrleansAuthOptions> _options, ILogger<ClientAccessTokenService> _logger)
         {
             this.options = _options?.Value;
             this.logger = _logger;

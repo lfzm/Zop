@@ -1,34 +1,36 @@
-﻿using Orleans;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Orleans;
+using Orleans.Runtime;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
-using Microsoft.Extensions.DependencyInjection;
-using Orleans.Runtime;
+using Zop.OrleansClient.Configuration;
 
 namespace Zop.OrleansClient
 {
     public class OrleansClient : IOrleansClient
     {
+        private readonly Dictionary<string, IClusterClient> clients = new Dictionary<string, IClusterClient>();
         private readonly IServiceProvider ServiceProvider;
-        private readonly OrleansClientOptions Options;
-        private IClusterClient client;
-        private AccessTokenType AccessTokenType;
-        public OrleansClient(IServiceProvider serviceProvider, IOptions<OrleansClientOptions> options)
+        private readonly OrleansAuthOptions Options;
+        private readonly ILogger Logger;
+        private AccessTokenType DefaultAccessTokenType;
+        public OrleansClient(IServiceProvider serviceProvider, IOptions<OrleansAuthOptions> options, ILogger<OrleansClient> logger)
         {
+            this.Logger = logger;
             this.ServiceProvider = serviceProvider;
             this.Options = options?.Value;
             if (this.Options != null)
-                AccessTokenType = this.Options.DefaultTokenType;
+                DefaultAccessTokenType = this.Options.DefaultTokenType;
 
         }
 
-        public void BindGrainReference(Orleans.Runtime.IAddressable grain)
+        public void BindGrainReference(IAddressable grain)
         {
-            client.BindGrainReference(grain);
+            //client.BindGrainReference(grain);
         }
-
         public Task<TGrainObserverInterface> CreateObjectReference<TGrainObserverInterface>(IGrainObserver obj) where TGrainObserverInterface : IGrainObserver
         {
             return this.GetClusterClient<TGrainObserverInterface>().CreateObjectReference<TGrainObserverInterface>(obj);
@@ -70,7 +72,6 @@ namespace Zop.OrleansClient
 
         public TGrainInterface GetGrain<TGrainInterface>(long primaryKey, string keyExtension, string grainClassNamePrefix = null) where TGrainInterface : IGrainWithIntegerCompoundKey
         {
-
             var i = this.GetClusterClient<TGrainInterface>().GetGrain<TGrainInterface>(primaryKey, keyExtension, grainClassNamePrefix);
             this.SetAuthorization();
             return i;
@@ -79,34 +80,33 @@ namespace Zop.OrleansClient
 
         public TGrainInterface GetGrain<TGrainInterface>(Guid primaryKey, AccessTokenType accessType) where TGrainInterface : IGrainWithGuidKey
         {
-            this.AccessTokenType = accessType;
+            this.DefaultAccessTokenType = accessType;
             return this.GetGrain<TGrainInterface>(primaryKey);
 
         }
 
         public TGrainInterface GetGrain<TGrainInterface>(long primaryKey, AccessTokenType accessType) where TGrainInterface : IGrainWithIntegerKey
         {
-            this.AccessTokenType = accessType;
+            this.DefaultAccessTokenType = accessType;
             return this.GetGrain<TGrainInterface>(primaryKey);
         }
 
         public TGrainInterface GetGrain<TGrainInterface>(string primaryKey, AccessTokenType accessType) where TGrainInterface : IGrainWithStringKey
         {
-            this.AccessTokenType = accessType;
+            this.DefaultAccessTokenType = accessType;
             return this.GetGrain<TGrainInterface>(primaryKey);
 
         }
 
         public TGrainInterface GetGrain<TGrainInterface>(Guid primaryKey, string keyExtension, AccessTokenType accessType) where TGrainInterface : IGrainWithGuidCompoundKey
         {
-            this.AccessTokenType = accessType;
+            this.DefaultAccessTokenType = accessType;
             return this.GetGrain<TGrainInterface>(primaryKey, keyExtension, null);
-
         }
 
         public TGrainInterface GetGrain<TGrainInterface>(long primaryKey, string keyExtension, AccessTokenType accessType) where TGrainInterface : IGrainWithIntegerCompoundKey
         {
-            this.AccessTokenType = accessType;
+            this.DefaultAccessTokenType = accessType;
             return this.GetGrain<TGrainInterface>(primaryKey, keyExtension, null);
 
         }
@@ -118,36 +118,52 @@ namespace Zop.OrleansClient
         /// <typeparam name="TGrainInterface"></typeparam>
         private IClusterClient GetClusterClient<TGrainInterface>()
         {
+            IClusterClient client = null;
             string name = typeof(TGrainInterface).Namespace;
-            this.client = this.GetServiceByName(name);
 
             int attempt = 0;
             while (true)
             {
                 try
                 {
-                    if (this.client.IsInitialized)
-                        return this.client;
+                    if (clients.ContainsKey(name))
+                        client = clients[name];
+                    else
+                    {
+                        client = BuilderClient(name);
+                        clients.Add(name, client);
+                    }
+                    if (client.IsInitialized)
+                        return client;
                     //客户端未初始化，连接服务端
-                    this.client.Connect().Wait();
+                    client.Connect().Wait();
+
+                    Logger.LogDebug($"Connection {name} Sucess...");
 
                 }
                 catch (Exception ex)
                 {
-                    if (ex.InnerException!=null &&  ex.InnerException is Orleans.Runtime.SiloUnavailableException)
+                    Logger.LogError(ex.Message);
+                    attempt++;
+                    if (attempt <= this.Options.InitializeAttemptsBeforeFailing)
                     {
-                        attempt++;
-                        Console.WriteLine($"Attempt {attempt} of " + this.Options.InitializeAttemptsBeforeFailing + " failed to initialize the Orleans client.");
-                        if (attempt <= this.Options.InitializeAttemptsBeforeFailing)
-                        {
-                            Task.Delay(TimeSpan.FromSeconds(4)).Wait();
-                            continue;
-                        }
+                        client = BuilderClient(name);
+                        clients[name] = client;
+
+                        Logger.LogDebug($"Attempt {attempt} of " + this.Options.InitializeAttemptsBeforeFailing + " failed to initialize the Orleans client.");
+                        Task.Delay(TimeSpan.FromSeconds(4)).Wait();
+                        continue;
                     }
+                
                 }
             }
         }
 
+        private IClusterClient BuilderClient(string name)
+        {
+            IClientBuilder builder = this.ServiceProvider.GetRequiredServiceByName<IClientBuilder>(name);
+            return builder.Build();
+        }
 
         /// <summary>
         /// 设置授权码
@@ -155,12 +171,12 @@ namespace Zop.OrleansClient
         /// <param name="accessType"></param>
         private void SetAuthorization()
         {
-            if (this.AccessTokenType == AccessTokenType.NotCredentials)
+            if (this.DefaultAccessTokenType == AccessTokenType.NotCredentials)
                 return;
-            var tokenService = ServiceProvider.GetRequiredServiceByName<IAccessTokenService>((this.AccessTokenType.ToString()));
+            var tokenService = ServiceProvider.GetRequiredServiceByName<IAccessTokenService>((this.DefaultAccessTokenType.ToString()));
             if (tokenService != null)
             {
-              RequestContext.Set("Authorization", string.Format("Bearer {0}", tokenService.AccessToken));
+                RequestContext.Set("Authorization", string.Format("Bearer {0}", tokenService.AccessToken));
             }
 
         }
@@ -172,5 +188,7 @@ namespace Zop.OrleansClient
             else
                 return null;
         }
+
+
     }
 }

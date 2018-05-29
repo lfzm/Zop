@@ -111,17 +111,7 @@ namespace Zop
             result.To(Result.ReFailure(message, status));
             return result;
         }
-        /// <summary>
-        /// 创建返回信息（返回处理失败）
-        /// </summary>
-        /// <param name="result">结果</param>
-        /// <returns></returns>
-        public static T ReFailure<T>(Result result) where T : Result, new()
-        {
-            T r = new T();
-            r.To(Result.ReFailure(result.SubMsg, result.SubCode));
-            return r;
-        }
+       
         /// <summary>
         /// 创建返回信息（返回处理失败）
         /// </summary>

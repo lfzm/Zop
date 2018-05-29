@@ -54,5 +54,40 @@ namespace Zop.Application.Services
         {
             return grainFactory.GetGrain<IApplicationService<TState>>(Guid.NewGuid());
         }
+
+
+        /// <summary>
+        /// 获取有状态的Grain
+        /// </summary>
+        /// <typeparam name="TState">状态类型</typeparam>
+        /// <param name="grainFactory"><see cref="IGrainFactory"/></param>
+        /// <param name="primaryKey">Grain primaryKey</param>
+        /// <returns></returns>
+        public static IMemoryCacheService<TState> GetStateCacheGrain<TState>(this IGrainFactory grainFactory, long primaryKey) where TState : class, new()
+        {
+            return grainFactory.GetGrain<IMemoryCacheService<TState>>(primaryKey);
+        }
+        /// <summary>
+        /// 获取有状态的Grain
+        /// </summary>
+        /// <typeparam name="TState">状态类型</typeparam>
+        /// <param name="grainFactory"><see cref="IGrainFactory"/></param>
+        /// <param name="primaryKey">Grain primaryKey</param>
+        /// <returns></returns>
+        public static IMemoryCacheService<TState> GetStateCacheGrain<TState>(this IGrainFactory grainFactory, Guid primaryKey) where TState : class, new()
+        {
+            return grainFactory.GetGrain<IMemoryCacheService<TState>>(primaryKey);
+        }
+        /// <summary>
+        /// 获取有状态的Grain
+        /// </summary>
+        /// <typeparam name="TState">状态类型</typeparam>
+        /// <param name="grainFactory"><see cref="IGrainFactory"/></param>
+        /// <param name="primaryKey">Grain primaryKey</param>
+        /// <returns></returns>
+        public static IMemoryCacheService<TState> GetStateCacheGrain<TState>(this IGrainFactory grainFactory, string primaryKey) where TState : class, new()
+        {
+            return grainFactory.GetGrain<IMemoryCacheService<TState>>(primaryKey);
+        }
     }
 }

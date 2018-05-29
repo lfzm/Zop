@@ -31,7 +31,7 @@ namespace Zop.Repositories
         }
         public async Task ReadStateAsync(string grainType, GrainReference grainReference, IGrainState grainState)
         {
-            object id = this.GetPrimaryKey(grainReference);
+            object id = grainReference.GetPrimaryKeyObject();
             grainState.State = await this.GetRepository(grainState).ReadAsync(id);
             this.SetETag(grainState);
         }
@@ -64,20 +64,7 @@ namespace Zop.Repositories
             }
 
         }
-        private object GetPrimaryKey(GrainReference grainReference)
-        {
-            var key = grainReference.GetPrimaryKeyString();
-            if (key != null)
-                return key;
-            if (grainReference.IsPrimaryKeyBasedOnLong())
-            {
-                var key1 = grainReference.GetPrimaryKeyLong();
-                if (key1 > 0)
-                    return key1;
-            }
-            return grainReference.GetPrimaryKey();
-
-        }
+      
         private IRepositoryStorage GetRepository(IGrainState grainState)
         {
             var Repository = ServiceProvider.GetServiceByName<IRepositoryStorage>(grainState.State.GetType().Name);

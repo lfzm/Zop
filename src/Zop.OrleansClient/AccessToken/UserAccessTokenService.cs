@@ -1,6 +1,7 @@
 ﻿using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Orleans.Runtime;
@@ -19,15 +20,15 @@ namespace Zop.OrleansClient.AccessToken
     {
         private readonly OrleansAuthOptions options;
         private readonly ILogger logger;
-        private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly IServiceProvider serviceProvider;
         public UserAccessTokenService(
             IOptions<OrleansAuthOptions> _options,
             ILogger<UserAccessTokenService> _logger,
-            IHttpContextAccessor _httpContextAccessor)
+            IServiceProvider _serviceProvider)
         {
             this.options = _options?.Value;
             this.logger = _logger;
-            this.httpContextAccessor = _httpContextAccessor;
+            this.serviceProvider = _serviceProvider;
         }
 
         public string AccessToken
@@ -42,7 +43,7 @@ namespace Zop.OrleansClient.AccessToken
                 }
                 //刷新访问令牌
                 if (IsExpiration)
-                    return httpContextAccessor.HttpContext.GetTokenAsync("access_token").Result;
+                    return serviceProvider.GetRequiredService<IHttpContextAccessor>().HttpContext.GetTokenAsync("access_token").Result;
                 else
                 {
 
@@ -57,7 +58,7 @@ namespace Zop.OrleansClient.AccessToken
             {
                 if (ExpirationTime == DateTime.MinValue)
                     return false;
-                else if (ExpirationTime > DateTime.UtcNow)
+                else if (ExpirationTime < DateTime.Now)
                     return false;
                 else return true;
             }
@@ -67,7 +68,7 @@ namespace Zop.OrleansClient.AccessToken
         {
             get
             {
-                var take = httpContextAccessor.HttpContext.GetTokenAsync("expires_at");
+                var take = serviceProvider.GetRequiredService<IHttpContextAccessor>().HttpContext.GetTokenAsync("expires_at");
                 take.Wait();
                 var expires_at = take.Result;
                 if (string.IsNullOrEmpty(expires_at))
@@ -78,12 +79,15 @@ namespace Zop.OrleansClient.AccessToken
             }
         }
 
+
         public async Task<string> RefreshAccessToken()
         {
-            string refreshToken = await httpContextAccessor.HttpContext.GetTokenAsync("refresh_token");
+            IHttpContextAccessor httpContextAccessor = serviceProvider.GetRequiredService<IHttpContextAccessor>();
+
+            string refreshToken = await httpContextAccessor.HttpContext.GetTokenAsync(options.AuthenticationScheme, "refresh_token");
             if (string.IsNullOrEmpty(refreshToken))
                 throw new Exception("刷新令牌不能为空");
-
+         
             DiscoveryClient client = new DiscoveryClient(options.Authority);
             client.Policy.RequireHttps = options.Authority.ToLower().Contains("https");
             var disco = await client.GetAsync();
@@ -106,14 +110,14 @@ namespace Zop.OrleansClient.AccessToken
                 tokens.Add(new AuthenticationToken { Name = "refresh_token", Value = new_refresh_token });
                 tokens.Add(new AuthenticationToken { Name = "expires_at", Value = expiresAt.ToString("o", CultureInfo.InvariantCulture) });
 
-                var info = await httpContextAccessor.HttpContext.AuthenticateAsync("Cookies");
+                var info = await httpContextAccessor.HttpContext.AuthenticateAsync(options.AuthenticationScheme );
                 info.Properties.StoreTokens(tokens);
                 await httpContextAccessor.HttpContext.SignInAsync("Cookies", info.Principal, info.Properties);
 
                 return httpContextAccessor.HttpContext.GetTokenAsync("access_token").Result;
             }
             else
-                throw new Exception("刷新访问令牌失败：error=" + tokenResult.ErrorDescription);
+                throw new Exception("刷新访问令牌失败：error=" + tokenResult.Error);
         }
     }
 }

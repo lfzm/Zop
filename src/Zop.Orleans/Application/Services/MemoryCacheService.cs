@@ -38,7 +38,8 @@ namespace Zop.Application.Services
 
             cached = await service.ReadAsync();
             //存储到内存中
-            cache.Set(key, cached, DateTimeOffset.FromUnixTimeSeconds(absoluteExpiration));
+            cache.Set(key, cached, TimeSpan.FromSeconds(absoluteExpiration));
+
             return cached;
         }
     }

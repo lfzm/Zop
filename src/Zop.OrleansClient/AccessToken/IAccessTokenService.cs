@@ -32,6 +32,10 @@ namespace Zop.OrleansClient
     public enum AccessTokenType
     {
         /// <summary>
+        /// 默认授权
+        /// </summary>
+        Default,
+        /// <summary>
         /// 用户授权凭证
         /// </summary>
         UserCredentials,

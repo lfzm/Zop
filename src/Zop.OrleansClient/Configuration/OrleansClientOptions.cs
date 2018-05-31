@@ -28,8 +28,12 @@ namespace Zop.OrleansClient.Configuration
         /// </summary>
         public List<Uri> StaticGatewayList { get; set; }
         /// <summary>
-        /// Zeekeeper的连接字符串
+        /// Zeekeeper的地址
         /// </summary>
-        public string ZooKeeperConnectionString { get; set; }
+        public string ZooKeeperAddress { get; set; }
+        /// <summary>
+        /// Consul地址
+        /// </summary>
+        public string ConsulAddress { get; set; }
     }
 }

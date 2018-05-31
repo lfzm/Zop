@@ -25,7 +25,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             builder.Invoke(new OrleansClientBuilder(services));
 
-            services.AddTransient<IOrleansClient, OrleansClient>();
+            services.AddSingleton<IOrleansClient, OrleansClient>();
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
             //添加授权服务
             services.TryAddSingleton(typeof(IKeyedServiceCollection<,>), typeof(KeyedServiceCollection<,>));

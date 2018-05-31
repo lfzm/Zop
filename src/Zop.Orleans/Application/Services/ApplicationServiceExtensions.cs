@@ -18,7 +18,7 @@ namespace Zop.Application.Services
         /// <param name="grainFactory"><see cref="IGrainFactory"/></param>
         /// <param name="primaryKey">Grain primaryKey</param>
         /// <returns></returns>
-        public static IApplicationService<TState> GetStateGrain<TState>(this IGrainFactory grainFactory, long primaryKey) where TState :  class, new()
+        public static IApplicationService<TState> GetStateGrain<TState>(this IGrainFactory grainFactory, long primaryKey) where TState : class, new()
         {
             return grainFactory.GetGrain<IApplicationService<TState>>(primaryKey);
         }
@@ -50,44 +50,44 @@ namespace Zop.Application.Services
         /// <typeparam name="TState">状态类型</typeparam>
         /// <param name="grainFactory"><see cref="IGrainFactory"/></param>
         /// <returns></returns>
-        public static IApplicationService<TState> GetStateGrain<TState>(this IGrainFactory grainFactory) where TState : class, new()
+        public static IApplicationService GetStateGrain<TState>(this IGrainFactory grainFactory) where TState : class, new()
         {
-            return grainFactory.GetGrain<IApplicationService<TState>>(Guid.NewGuid());
+            return grainFactory.GetStateGrain<TState>(Guid.NewGuid());
         }
 
+        /// <summary>
+        /// 获取有状态的Grain
+        /// </summary>
+        /// <typeparam name="TState">状态类型</typeparam>
+        /// <param name="grainFactory"><see cref="IGrainFactory"/></param>
+        /// <param name="primaryKey">Grain primaryKey</param>
+        /// <returns></returns>
+        public static IMemoryCacheService GetCacheGrain(this IGrainFactory grainFactory, long primaryKey)
+        {
+            return grainFactory.GetGrain<IMemoryCacheService>(primaryKey);
+        }
+        /// <summary>
+        /// 获取有状态的Grain
+        /// </summary>
+        /// <typeparam name="TState">状态类型</typeparam>
+        /// <param name="grainFactory"><see cref="IGrainFactory"/></param>
+        /// <param name="primaryKey">Grain primaryKey</param>
+        /// <returns></returns>
+        public static IMemoryCacheService GetCacheGrain(this IGrainFactory grainFactory, Guid primaryKey)
+        {
+            return grainFactory.GetGrain<IMemoryCacheService>(primaryKey);
+        }
+        /// <summary>
+        /// 获取有状态的Grain
+        /// </summary>
+        /// <typeparam name="TState">状态类型</typeparam>
+        /// <param name="grainFactory"><see cref="IGrainFactory"/></param>
+        /// <param name="primaryKey">Grain primaryKey</param>
+        /// <returns></returns>
+        public static IMemoryCacheService GetCacheGrain(this IGrainFactory grainFactory, string primaryKey)
+        {
+            return grainFactory.GetGrain<IMemoryCacheService>(primaryKey);
+        }
 
-        /// <summary>
-        /// 获取有状态的Grain
-        /// </summary>
-        /// <typeparam name="TState">状态类型</typeparam>
-        /// <param name="grainFactory"><see cref="IGrainFactory"/></param>
-        /// <param name="primaryKey">Grain primaryKey</param>
-        /// <returns></returns>
-        public static IMemoryCacheService<TState> GetStateCacheGrain<TState>(this IGrainFactory grainFactory, long primaryKey) where TState : class, new()
-        {
-            return grainFactory.GetGrain<IMemoryCacheService<TState>>(primaryKey);
-        }
-        /// <summary>
-        /// 获取有状态的Grain
-        /// </summary>
-        /// <typeparam name="TState">状态类型</typeparam>
-        /// <param name="grainFactory"><see cref="IGrainFactory"/></param>
-        /// <param name="primaryKey">Grain primaryKey</param>
-        /// <returns></returns>
-        public static IMemoryCacheService<TState> GetStateCacheGrain<TState>(this IGrainFactory grainFactory, Guid primaryKey) where TState : class, new()
-        {
-            return grainFactory.GetGrain<IMemoryCacheService<TState>>(primaryKey);
-        }
-        /// <summary>
-        /// 获取有状态的Grain
-        /// </summary>
-        /// <typeparam name="TState">状态类型</typeparam>
-        /// <param name="grainFactory"><see cref="IGrainFactory"/></param>
-        /// <param name="primaryKey">Grain primaryKey</param>
-        /// <returns></returns>
-        public static IMemoryCacheService<TState> GetStateCacheGrain<TState>(this IGrainFactory grainFactory, string primaryKey) where TState : class, new()
-        {
-            return grainFactory.GetGrain<IMemoryCacheService<TState>>(primaryKey);
-        }
     }
 }

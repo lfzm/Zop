@@ -4,14 +4,15 @@ using Orleans;
 using Orleans.Concurrency;
 using System;
 using System.Threading.Tasks;
+using Zop.Domain.Entities;
 
 namespace Zop.Application.Services
 {
     [StatelessWorker]
-    public class MemoryCacheService<TEntity> : Grain, IMemoryCacheService<TEntity> where TEntity : class, new()
+    public class MemoryCacheService : Grain, IMemoryCacheService
     {
         ///<inheritdoc/>
-        public async Task<TEntity> ReadAsync(long absoluteExpiration = 1800)
+        public async Task<TEntity> ReadAsync<TEntity>(long absoluteExpiration = 300) where TEntity : class, IEntity, new()
         {
             string key = typeof(TEntity).FullName + this.GetPrimaryKeyObject();
             var cache = this.ServiceProvider.GetRequiredService<IMemoryCache>();
@@ -36,10 +37,17 @@ namespace Zop.Application.Services
             else
                 service = this.GrainFactory.GetStateGrain<TEntity>((Guid)primaryKey);
 
-            cached = await service.ReadAsync();
-            //存储到内存中
-            cache.Set(key, cached, TimeSpan.FromSeconds(absoluteExpiration));
+            TEntity newCached = await service.ReadAsync();
 
+            lock (cache)
+            {
+                //存储到内存中
+                if (!cache.TryGetValue(key, out cached))
+                {
+                    cache.Set(key, newCached, TimeSpan.FromSeconds(absoluteExpiration));
+                    cached = newCached;
+                }
+            }
             return cached;
         }
     }

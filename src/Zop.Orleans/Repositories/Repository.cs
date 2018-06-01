@@ -12,7 +12,7 @@ using Zop.Repositories.ChangeDetector;
 
 namespace Zop.Repositories
 {
-    public abstract class Repository<TEntity, TPrimaryKey> : IRepositoryStorage,IRepository<TEntity, TPrimaryKey> where TEntity : class,IEntity
+    public abstract class Repository<TEntity, TPrimaryKey> : IRepositoryStorage, IRepository<TEntity, TPrimaryKey> where TEntity : class, IEntity
     {
         public Repository()
         {
@@ -46,7 +46,7 @@ namespace Zop.Repositories
         /// <summary>
         /// 实体快照
         /// </summary>
-        protected TEntity EntitySnapshot { get;  set; }
+        protected TEntity EntitySnapshot { get; set; }
         /// <summary>
         /// 获取仓储
         /// </summary>
@@ -95,7 +95,6 @@ namespace Zop.Repositories
             //初始化实体
             if (e != null)
             {
-                this.InitEntity(e);
                 this.SetEntitySnapshot(e);
             }
             return e;
@@ -116,65 +115,31 @@ namespace Zop.Repositories
             else
             {
                 //修改数据
+                this.SetVersionNo(e);
                 e = await this.UpdateAsync(e);
             }
             //初始化实体
             if (e != null)
             {
-                this.InitEntity(e);
                 this.SetEntitySnapshot(e);
+
             }
             return e;
         }
         /// <summary>
-        /// 实体初始化
-        /// 1、清除属性修改记录器
-        /// 2、设置版本号
+        /// 设置线程安全锁，版本号
         /// </summary>
         /// <param name="entity">实体</param>
-        private void InitEntity(object entity)
+        private void SetVersionNo(object entity)
         {
             if (entity == null) return;
-            try
+            //判断是否需要设置版本号
+            if (typeof(AggregateConcurrencySafe<TPrimaryKey>).IsInstanceOfType(entity))
             {
-                //判断是否需要设置版本号
-                if (typeof(AggregateConcurrencySafe<TPrimaryKey>).IsInstanceOfType(entity))
-                {
-                    //设置版本号
-                    ((AggregateConcurrencySafe<TPrimaryKey>)entity).VersionNo++;
-                }
-                //循环清除属性修改记录器
-                foreach (var info in entity.GetType().GetProperties())
-                {
-                    var value = info.GetValue(entity);
-                    if (value == null)
-                        continue;
-                    if (typeof(IEntity).IsAssignableFrom(info.PropertyType))
-                    {
-                        this.InitEntity(value);
-                    }
-                    else if (typeof(IList).IsAssignableFrom(info.PropertyType))
-                    {
-                        if (typeof(IEntity).IsAssignableFrom(info.PropertyType.GenericTypeArguments[0]))
-                        {
-                            foreach (var item in ((IList)value))
-                            {
-                                this.InitEntity(item);
-                            }
-                        }
-                        //清除修改的属性
-                        else if (info.Name == "ChangedProperty")
-                        {
-                            ((IList)value).Clear();
-                        }
-                    }
+                //设置版本号
+                ((AggregateConcurrencySafe<TPrimaryKey>)entity).VersionNo++;
+            }
 
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
         }
         /// <summary>
         /// 设置快照

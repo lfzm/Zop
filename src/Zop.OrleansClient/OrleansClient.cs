@@ -88,9 +88,10 @@ namespace Zop.OrleansClient
                                 client = BuilderClient(name);
                                 clients.Add(name, client);
                             }
+                            else
+                                client = clients[name];
                         }
                     }
-
 
                     if (!client.IsInitialized)
                     {
@@ -132,6 +133,8 @@ namespace Zop.OrleansClient
         /// <param name="accessType"></param>
         private void SetAuthorization(AccessTokenType tokenType)
         {
+            if (tokenType == AccessTokenType.NotCredentials)
+                return;
             if (tokenType == AccessTokenType.Default)
                 tokenType = Options.DefaultTokenType;
             var tokenService = ServiceProvider.GetRequiredServiceByName<IAccessTokenService>((tokenType.ToString()));

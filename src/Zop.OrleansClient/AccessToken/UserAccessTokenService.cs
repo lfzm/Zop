@@ -43,7 +43,7 @@ namespace Zop.OrleansClient.AccessToken
                 }
                 //刷新访问令牌
                 if (IsExpiration)
-                    return serviceProvider.GetRequiredService<IHttpContextAccessor>().HttpContext.GetTokenAsync("access_token").Result;
+                    return serviceProvider.GetRequiredService<IHttpContextAccessor>().HttpContext.GetTokenAsync( options.AuthenticationScheme, "access_token").Result;
                 else
                 {
 
@@ -83,7 +83,6 @@ namespace Zop.OrleansClient.AccessToken
         public async Task<string> RefreshAccessToken()
         {
             IHttpContextAccessor httpContextAccessor = serviceProvider.GetRequiredService<IHttpContextAccessor>();
-
             string refreshToken = await httpContextAccessor.HttpContext.GetTokenAsync(options.AuthenticationScheme, "refresh_token");
             if (string.IsNullOrEmpty(refreshToken))
                 throw new Exception("刷新令牌不能为空");

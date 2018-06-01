@@ -46,6 +46,10 @@ namespace Zop.OrleansClient
         /// <summary>
         /// 不需要授权凭证
         /// </summary>
-        NotCredentials
+        NotCredentials,
+        /// <summary>
+        /// Orlenas 上下文获取配置
+        /// </summary>
+        OrleansContext
     }
 }

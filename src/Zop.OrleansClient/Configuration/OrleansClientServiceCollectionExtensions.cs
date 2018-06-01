@@ -31,6 +31,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.TryAddSingleton(typeof(IKeyedServiceCollection<,>), typeof(KeyedServiceCollection<,>));
             services.AddSingletonNamedService<IAccessTokenService, ClientAccessTokenService>((AccessTokenType.ClientCredentials.ToString()));
             services.AddSingletonNamedService<IAccessTokenService, UserAccessTokenService>((AccessTokenType.UserCredentials.ToString()));
+            services.AddSingletonNamedService<IAccessTokenService, OrleansContextTokenService>((AccessTokenType.OrleansContext.ToString()));
             return services;
         }
 

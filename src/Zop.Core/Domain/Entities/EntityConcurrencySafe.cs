@@ -11,21 +11,10 @@ namespace Zop.Domain.Entities
     [Serializable]                                                                                                                            
     public abstract class EntityConcurrencySafe<TPrimaryKey> : Entity<TPrimaryKey>, IEntity<TPrimaryKey>, IConcurrencySafe
     {
-        private int versionNo = 0;
         /// <summary>
         /// 乐观锁 版本号
         /// </summary>
-        public int VersionNo
-        {
-            get
-            {
-                return versionNo;
-            }
-            set
-            {
-                versionNo = value + 1;
-            }
-        }
+        public int VersionNo { get; set; }
     }
  
 }

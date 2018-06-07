@@ -133,10 +133,10 @@ namespace Zop.Repositories
         private void SetVersionNo(object entity)
         {
             if (entity == null) return;
+
             //判断是否需要设置版本号
             if (typeof(AggregateConcurrencySafe<TPrimaryKey>).IsInstanceOfType(entity))
             {
-                //设置版本号
                 ((AggregateConcurrencySafe<TPrimaryKey>)entity).VersionNo++;
             }
 

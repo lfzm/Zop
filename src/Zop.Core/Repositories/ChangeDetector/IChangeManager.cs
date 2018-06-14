@@ -12,10 +12,9 @@ namespace Zop.Repositories.ChangeDetector
         /// <summary>
         /// 根据实体类型和唯一标示获取实体变动信息对象
         /// </summary>
-        /// <param name="type">实体类型</param>
-        /// <param name="Id">唯一标示</param>
+        /// <param name="obj">对象值</param>
         /// <returns></returns>
-        ChangeEntry GetChanger(Type type, object Id);
+        ChangeEntry GetChanger(object obj);
 
         /// <summary>
         /// 根据变动类型获取实体对象

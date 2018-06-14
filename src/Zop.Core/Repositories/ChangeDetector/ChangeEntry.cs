@@ -14,19 +14,7 @@ namespace Zop.Repositories.ChangeDetector
         /// 实体类型
         /// </summary>
         public Type EntryType { get { return this.NewestEntry != null ? this.NewestEntry.GetType() : this.OriginalEntry.GetType(); } }
-        /// <summary>
-        /// 唯一标示ID
-        /// </summary>
-        public object Id
-        {
-            get
-            {
-                object obj = NewestEntry;
-                if (obj == null)
-                    obj = OriginalEntry;
-                return EntryType.GetProperties().Where(f => f.Name == "Id" && f.PropertyType.IsValueType).FirstOrDefault()?.GetValue((obj));
-            }
-        }
+
         /// <summary>
         /// 原来的实体
         /// </summary>

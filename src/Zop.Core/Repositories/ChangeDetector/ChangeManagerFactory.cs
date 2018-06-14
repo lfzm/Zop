@@ -27,7 +27,7 @@ namespace Zop.Repositories.ChangeDetector
                     this.changeManager.AddChanger(change);
                 else
                 {
-                    var change2 = this.changeManager.GetChanger(change.EntryType, change.Id);
+                    var change2 = this.changeManager.GetChanger(change.NewestEntry);
                     if (change2 == null)
                     {
                         this.changeManager.AddChanger(change);
@@ -50,9 +50,9 @@ namespace Zop.Repositories.ChangeDetector
         /// <returns></returns>
         private ChangeEntryType ResolveChangeType(Difference difference)
         {
-            if (difference.MessagePrefix == "_Add_")
+            if (difference.Object2Value == "_ADD_")
                 return ChangeEntryType.Addition;
-            else if (difference.MessagePrefix == "_DEL_")
+            else if (difference.Object1Value == "_DEL_")
                 return ChangeEntryType.Remove;
             else
                 return ChangeEntryType.Modify;

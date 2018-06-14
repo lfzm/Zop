@@ -18,7 +18,7 @@ namespace KellermanSoftware.CompareNetObjects.TypeComparers
         }
         public override bool IsTypeMatch(Type type1, Type type2)
         {
-            bool isTypeMatch= base.IsTypeMatch(type1, type2);
+            bool isTypeMatch = base.IsTypeMatch(type1, type2);
             if (isTypeMatch)
             {
                 if (type1.GenericTypeArguments.Count() == 0)
@@ -53,7 +53,6 @@ namespace KellermanSoftware.CompareNetObjects.TypeComparers
         private void CompareItems(CompareParms parms)
         {
             IDictionary<object, object> modifyStatus = new Dictionary<object, object>();
-
             IEnumerator enumerator2 = ((ICollection)parms.Object2).GetEnumerator();
             while (enumerator2.MoveNext())
             {
@@ -101,12 +100,10 @@ namespace KellermanSoftware.CompareNetObjects.TypeComparers
                 return;
             Difference difference = new Difference
             {
-
-                MessagePrefix = "_Add_",
                 Object1 = null,
                 Object2 = newest,
                 Object1Value = null,
-                Object2Value = newest.GetType().Name,
+                Object2Value = "_ADD_",
                 ParentObject1 = parms.Object1,
                 ParentObject2 = parms.Object2,
                 PropertyName = parms.BreadCrumb
@@ -120,10 +117,9 @@ namespace KellermanSoftware.CompareNetObjects.TypeComparers
 
             Difference difference = new Difference
             {
-                MessagePrefix = "_DEL_",
                 Object1 = original,
                 Object2 = null,
-                Object1Value = original.GetType().Name,
+                Object1Value = "_DEL_",
                 Object2Value = null,
                 ParentObject1 = parms.Object1,
                 ParentObject2 = parms.Object2,

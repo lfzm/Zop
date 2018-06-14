@@ -11,50 +11,48 @@ namespace Zop.Repositories.ChangeDetector
         /// <summary>
         /// 实体变动信息
         /// </summary>
-        public IDictionary<string, ChangeEntry> EntryChangers = new Dictionary<string, ChangeEntry>();
+        public IDictionary<object, ChangeEntry> ChangersEntry = new Dictionary<object, ChangeEntry>();
         /// <summary>
-        /// 实体添加信息
+        /// 删除的实体
         /// </summary>
-        public IList<ChangeEntry> AdditionEntryChangers = new List<ChangeEntry>();
+        public IList<ChangeEntry> DeleteEntry = new List<ChangeEntry>();
 
 
         public void AddChanger(ChangeEntry change)
         {
-            if (change.Type == ChangeEntryType.Addition)
-                this.AdditionEntryChangers.Add(change);
+            if (change.Type == ChangeEntryType.Remove)
+                this.DeleteEntry.Add(change);
             else
             {
-                string key = change.EntryType.Name + change.Id;
-                var c = this.GetChanger(change.EntryType, change.Id);
+                var c = this.GetChanger(change.NewestEntry);
                 if (c != null)
                     c = change;
                 else
-                    this.EntryChangers.Add(key, change);
+                    this.ChangersEntry.Add(change.NewestEntry, change);
             }
         }
 
         public void ClearChanger()
         {
-            this.EntryChangers.Clear();
-            this.AdditionEntryChangers.Clear();
+            this.ChangersEntry.Clear();
+            this.DeleteEntry.Clear();
         }
 
     
-        public ChangeEntry GetChanger(Type type, object Id)
+        public ChangeEntry GetChanger(object obj)
         {
-            string key = type.Name + Id;
-            if (!this.EntryChangers.ContainsKey(key))
+            if (!this.ChangersEntry.ContainsKey(obj))
                 return null;
-            return this.EntryChangers[key];
+            return this.ChangersEntry[obj];
         }
 
         public IList<ChangeEntry> GetChangers(ChangeEntryType changeType)
         {
-            if (changeType == ChangeEntryType.Addition)
-                return AdditionEntryChangers;
+            if (changeType == ChangeEntryType.Remove)
+                return DeleteEntry;
             else
             {
-                return this.EntryChangers.Values.ToList().Where(f => f.Type == changeType).ToList();
+                return this.ChangersEntry.Values.ToList().Where(f => f.Type == changeType).ToList();
             }
         }
     }

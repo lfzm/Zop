@@ -62,7 +62,6 @@ namespace Zop.Repositories
             {
                 grainState.ETag = ((IConcurrencySafe)grainState.State).VersionNo.ToString();
             }
-
         }
       
         private IRepositoryStorage GetRepository(IGrainState grainState)

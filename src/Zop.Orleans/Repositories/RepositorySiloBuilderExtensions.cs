@@ -1,13 +1,9 @@
-﻿using AutoMapper;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Orleans.Providers;
 using Orleans.Runtime;
 using Orleans.Storage;
 using System;
-using System.Linq.Expressions;
-using System.Reflection;
-using Zop.Domain.Entities;
 using Zop.Repositories;
 using Zop.Repositories.ChangeDetector;
 
@@ -15,7 +11,6 @@ namespace Orleans
 {
     public static class RepositorySiloBuilderExtensions
     {
-
         /// <summary>
         /// 添加支付应用服务
         /// </summary>
@@ -25,12 +20,16 @@ namespace Orleans
         /// <returns></returns>
         public static IServiceCollection AddRepositoryStorage(this IServiceCollection services, Action<RepositoryBuilder> builer, string storageName = RepositoryStorage.DefaultName)
         {
-            services.TryAddTransient<IChangeDetector, ChangeDetector>();
-            services.TryAddTransient<IChangeManager, ChangeManager>();
-            services.TryAddTransient<IChangeManagerFactory, ChangeManagerFactory>();
+            services.TryAddSingleton<IChangeDetector, ChangeDetector>();
+            services.TryAddSingleton<IChangeManager, ChangeManager>();
+            services.TryAddSingleton<IChangeManagerFactory, ChangeManagerFactory>();
+            services.AddMemoryCache(opt =>
+            {
+                opt.ExpirationScanFrequency = TimeSpan.FromHours(2);
+            });
 
             services.TryAddSingleton<IGrainStorage>(sp => sp.GetServiceByName<IGrainStorage>(ProviderConstants.DEFAULT_STORAGE_PROVIDER_NAME));
-            services.AddScopedNamedService<IGrainStorage, RepositoryStorage>(storageName);
+            services.AddSingletonNamedService<IGrainStorage, RepositoryStorage>(storageName);
 
             var builder = new RepositoryBuilder(services);
             builer.Invoke(builder);

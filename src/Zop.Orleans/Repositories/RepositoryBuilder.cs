@@ -19,7 +19,7 @@ namespace Zop.Repositories
         /// <returns></returns>
         public RepositoryBuilder AddRepository<TRepository>(string name) where TRepository : class, IRepositoryStorage
         {
-            Service.AddScopedNamedService<IRepositoryStorage, TRepository>(name);
+            Service.AddSingletonNamedService<IRepositoryStorage, TRepository>(name);
             return this;
         }
         /// <summary>

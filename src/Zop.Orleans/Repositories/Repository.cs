@@ -9,44 +9,46 @@ using System.Threading.Tasks;
 using Zop.Domain.Entities;
 using Zop.Repositories;
 using Zop.Repositories.ChangeDetector;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Zop.Repositories
 {
-    public abstract class Repository<TEntity, TPrimaryKey> : IRepositoryStorage, IRepository<TEntity, TPrimaryKey> where TEntity : class, IEntity
+    public abstract class Repository<TEntity, TPrimaryKey> :
+        IRepositoryStorage, IRepository<TEntity, TPrimaryKey> where TEntity : class, IEntity
     {
-        public Repository()
-        {
-
-        }
-        public Repository(IChangeDetector _changeDetector)
-        {
-            this.ChangeDetector = _changeDetector;
-        }
+        private IServiceProvider serviceProvider;
+        private readonly IMemoryCache cache;
         /// <summary>
         /// 变动探测器
         /// </summary>
         protected readonly IChangeDetector ChangeDetector;
+        public Repository(IServiceProvider _serviceProvider)
+        {
+            this.ChangeDetector = _serviceProvider.GetService<IChangeDetector>();
+            this.cache = _serviceProvider.GetService<IMemoryCache>(); ;
+        }
         /// <summary>
         /// 获取变动管理器
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        protected async Task<IChangeManager> GetChangeManagerAsync(TEntity entity)
+        protected Task<IChangeManager> GetChangeManagerAsync(TEntity entity)
         {
             if (ChangeDetector == null)
                 throw new ZopException("Change Detector cannot be empty");
-            if (this.EntitySnapshot == null)
-            {
-                var id = (TPrimaryKey)typeof(TEntity).GetProperties().Where(f => f.Name == "Id" && f.PropertyType.IsValueType)
-                    .FirstOrDefault()?.GetValue(entity);
-                this.EntitySnapshot = await this.GetAsync(id);
-            }
-            return this.ChangeDetector.DetectChanges(entity, this.EntitySnapshot);
+
+            var id = (TPrimaryKey)typeof(TEntity).GetProperties().Where(f => f.Name == "Id")
+                .FirstOrDefault()?.GetValue(entity);
+            string key = typeof(TEntity).FullName + id;
+            var oleEntity = this.cache.GetOrCreate(key, e =>
+          {
+              return this.GetAsync(id).Result;
+          });
+            var cm = this.ChangeDetector.DetectChanges(entity, oleEntity);
+            return Task.FromResult(cm);
         }
-        /// <summary>
-        /// 实体快照
-        /// </summary>
-        protected TEntity EntitySnapshot { get; set; }
+
         /// <summary>
         /// 获取仓储
         /// </summary>
@@ -92,11 +94,9 @@ namespace Zop.Repositories
                     return null;
             }
             var e = await this.GetAsync((TPrimaryKey)id);
-            //初始化实体
+            //存储快照
             if (e != null)
-            {
-                this.SetEntitySnapshot(e);
-            }
+                this.SetEntitySnapshot(e, id);
             return e;
         }
         public async Task<object> WriteAsync(object entity)
@@ -118,11 +118,12 @@ namespace Zop.Repositories
                 this.SetVersionNo(e);
                 e = await this.UpdateAsync(e);
             }
-            //初始化实体
+            //存储快照
             if (e != null)
             {
-                this.SetEntitySnapshot(e);
-
+                var id = (TPrimaryKey)typeof(TEntity).GetProperties() .Where(f => f.Name == "Id")
+                    .FirstOrDefault()?.GetValue(entity);
+                this.SetEntitySnapshot(e, id);
             }
             return e;
         }
@@ -139,18 +140,19 @@ namespace Zop.Repositories
             {
                 ((AggregateConcurrencySafe<TPrimaryKey>)entity).VersionNo++;
             }
-
         }
         /// <summary>
         /// 设置快照
         /// </summary>
         /// <param name="entity">实体对象</param>
-        private void SetEntitySnapshot(object entity)
+        private void SetEntitySnapshot(object entity,object id)
         {
             if (entity == null) return;
             //变动探测器为空无需设置快照
             if (ChangeDetector != null)
-                this.EntitySnapshot = ((IEntity)entity).Clone<TEntity>();
+            {
+                this.cache.Set(typeof(TEntity).FullName + id, ((IEntity)entity).Clone<TEntity>());
+            }
         }
     }
 }

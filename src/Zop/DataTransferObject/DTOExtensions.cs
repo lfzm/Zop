@@ -16,7 +16,7 @@ namespace Zop.DTO
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public static bool IsValid(this RequestDto entity)
+        public static bool IsValid(this IRequestDto entity)
         {
             return entity.IsValid(null);
         }
@@ -24,7 +24,7 @@ namespace Zop.DTO
         /// 验证实体对象
         /// </summary>
         /// <param name="entity"></param>
-        public static Result ValidResult(this RequestDto entity)
+        public static Result ValidResult(this IRequestDto entity)
         {
             return ValidationHelper.ValidResult(entity);
         }
@@ -35,7 +35,7 @@ namespace Zop.DTO
         /// <param name="logger">日志记录</param>
         /// <param name="logLevel">日志记录级别</param>
         /// <returns></returns>
-        public static bool IsValid(this RequestDto entity, ILogger logger, LogLevel logLevel = LogLevel.Information)
+        public static bool IsValid(this IRequestDto entity, ILogger logger, LogLevel logLevel = LogLevel.Information)
         {
             return ValidationHelper.IsValid(entity, logger, logLevel);
         }

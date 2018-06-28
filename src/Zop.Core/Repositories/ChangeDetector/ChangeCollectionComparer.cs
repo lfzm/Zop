@@ -67,7 +67,7 @@ namespace KellermanSoftware.CompareNetObjects.TypeComparers
                 }
                 else
                 {
-                    var id = targetType.GetProperties().Where(f => f.Name == "Id" && f.PropertyType.IsValueType).FirstOrDefault()?.GetValue(enumerator2.Current);
+                    var id = targetType.GetProperties().Where(f => f.Name == "Id" ).FirstOrDefault()?.GetValue(enumerator2.Current);
                     if (!modifyStatus.ContainsKey(id))
                         modifyStatus.Add(id, value);
                     else
@@ -82,7 +82,7 @@ namespace KellermanSoftware.CompareNetObjects.TypeComparers
                 if (value == null) continue;
 
                 var targetType = value.GetType();
-                var id = targetType.GetProperties().Where(f => f.Name == "Id" && f.PropertyType.IsValueType).FirstOrDefault()?.GetValue(value);
+                var id = targetType.GetProperties().Where(f => f.Name == "Id").FirstOrDefault()?.GetValue(value);
                 if (modifyStatus.ContainsKey(id))
                 {
                     var updValue = modifyStatus[id];

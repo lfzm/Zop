@@ -52,7 +52,7 @@ namespace Zop.Domain.Entities
                 TPrimaryKey defaultValue = default(TPrimaryKey);
                 if (Id == null)
                     return true;
-                if (defaultValue.Equals(Id))
+                if (Id.Equals(defaultValue) )
                     return true;
                 else
                     return false;

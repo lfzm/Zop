@@ -50,7 +50,7 @@ namespace Zop.Domain.Entities
                     return true;
 
                 TPrimaryKey defaultValue = default(TPrimaryKey);
-                if (defaultValue == null)
+                if (Id == null)
                     return true;
                 if (defaultValue.Equals(Id))
                     return true;

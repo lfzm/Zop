@@ -90,7 +90,6 @@ namespace KellermanSoftware.CompareNetObjects.TypeComparers
                 }
                 else
                     this.RemoveDefference(value, id, parms);
-
             }
 
         }

@@ -99,11 +99,7 @@ namespace Zop.Domain.Entities
 
             return Id.Equals(other.Id);
         }
-        /// <inheritdoc/>
-        public override int GetHashCode()
-        {
-            return Id.GetHashCode();
-        }
+
         /// <inheritdoc/>
         public override string ToString()
         {

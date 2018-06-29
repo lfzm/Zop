@@ -50,43 +50,7 @@ namespace Zop.Domain.Values
             return (object)item != null && Equals((TValueObject)item);
 
         }
-        /// <summary>
-        /// 获取Hash Code
-        /// </summary>
-        /// <returns></returns>
-        public override int GetHashCode()
-        {
-            const int index = 1;
-            const int initialHasCode = 31;
-
-            var publicProperties = GetType().GetTypeInfo().GetProperties();
-
-            if (!publicProperties.Any())
-            {
-                return initialHasCode;
-            }
-
-            var hashCode = initialHasCode;
-            var changeMultiplier = false;
-
-            foreach (var property in publicProperties)
-            {
-                var value = property.GetValue(this, null);
-
-                if (value == null)
-                {
-                    //support {"a",null,null,"a"} != {null,"a","a",null}
-                    hashCode = hashCode ^ (index * 13);
-                    continue;
-                }
-
-                hashCode = hashCode * (changeMultiplier ? 59 : 114) + value.GetHashCode();
-                changeMultiplier = !changeMultiplier;
-            }
-
-            return hashCode;
-        }
-
+       
         public static bool operator ==(ValueObject<TValueObject> x, ValueObject<TValueObject> y)
         {
             if (ReferenceEquals(x, y))

@@ -11,7 +11,7 @@ namespace Zop.Domain.Values
     /// </summary>
     /// <typeparam name="TValueObject">值对象的类型</typeparam>
     [Serializable]
-    public abstract class ValueObject<TValueObject> : IEquatable<TValueObject>
+    public abstract class ValueObject<TValueObject> : IEquatable<TValueObject>, IValueObject
         where TValueObject : ValueObject<TValueObject>
     {
         /// <summary>

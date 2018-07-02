@@ -18,11 +18,16 @@ namespace Zop.Repositories.ChangeDetector
         public IChangeManager DetectChanges(object newEntry, object oldEntry)
         {
             CompareLogic compareLogic = new CompareLogic();
+            compareLogic.Config.MaxDifferences = int.MaxValue;
             compareLogic.Config.CompareStaticFields = false;//静态字段不比较
             compareLogic.Config.CompareStaticProperties = false;//静态属性不比较
             compareLogic.Config.Caching = true;
-            compareLogic.Config.CustomComparers.Add(new ChangeCollectionComparer(RootComparerFactory.GetRootComparer()));
+            compareLogic.Config.CustomComparers.Add(new ZopDictionaryComparer(RootComparerFactory.GetRootComparer()));
+            compareLogic.Config.CustomComparers.Add(new ZopListComparer(RootComparerFactory.GetRootComparer()));
+            compareLogic.Config.CustomComparers.Add(new EntityCollectionComparer(RootComparerFactory.GetRootComparer()));
+
             var result = compareLogic.Compare(oldEntry, newEntry);
+
             
             return this.changeManagerFactory.Create(result);
         }

@@ -19,7 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{D834F976-C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1849F9C3-DEE2-48D2-AD26-E6B24EE77B6E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Zop.Core.Test", "test\Zop.Core.Test\Zop.Core.Test.csproj", "{252B23FE-06A2-4705-8784-93ABD014A748}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zop.Core.Test", "test\Zop.Core.Test\Zop.Core.Test.csproj", "{252B23FE-06A2-4705-8784-93ABD014A748}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

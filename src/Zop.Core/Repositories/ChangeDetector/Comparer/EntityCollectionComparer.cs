@@ -11,9 +11,9 @@ using Zop.Domain.Entities;
 
 namespace KellermanSoftware.CompareNetObjects.TypeComparers
 {
-    public class ChangeCollectionComparer : CollectionComparer
+    public class EntityCollectionComparer : CollectionComparer
     {
-        public ChangeCollectionComparer(RootComparer rootComparer) : base(rootComparer)
+        public EntityCollectionComparer(RootComparer rootComparer) : base(rootComparer)
         {
         }
         public override bool IsTypeMatch(Type type1, Type type2)

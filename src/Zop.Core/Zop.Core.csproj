@@ -2,18 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>2.0.0-bate8</Version>
+    <Version>2.0.0-bate12</Version>
     <Description>Zop Orleans 服务核心库 领域实体 应用服务 仓储</Description>
     <RootNamespace>Zop</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CompareNETObjects" Version="4.52.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Zop\Zop.csproj" />
+    <PackageReference Include="CompareNETObjects" Version="4.53.0" />
+    <PackageReference Include="Zop" Version="2.0.0.10626" />
   </ItemGroup>
 
 </Project>

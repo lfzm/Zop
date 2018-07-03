@@ -19,7 +19,8 @@ namespace Zop.Repositories
         /// <returns></returns>
         public RepositoryBuilder AddRepository<TRepository>(string name) where TRepository : class, IRepositoryStorage
         {
-            Service.AddScopedNamedService<IRepositoryStorage, TRepository>(name);
+            //TODO：因为EF会存储很多状态，把DBContext改为Transient
+            Service.AddTransientNamedService<IRepositoryStorage, TRepository>(name);
             return this;
         }
         /// <summary>

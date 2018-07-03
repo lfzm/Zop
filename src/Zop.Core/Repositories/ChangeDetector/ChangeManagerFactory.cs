@@ -92,7 +92,6 @@ namespace Zop.Repositories.ChangeDetector
             change.Navigation = difference.ParentPropertyName;
             return change;
         }
-
         /// <summary>
         /// 分析变动实体的变动属性
         /// </summary>

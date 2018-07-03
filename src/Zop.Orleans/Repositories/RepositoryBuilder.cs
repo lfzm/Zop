@@ -1,6 +1,4 @@
-﻿
-
-using Orleans.Runtime;
+﻿using Orleans.Runtime;
 
 namespace Zop.Repositories
 {

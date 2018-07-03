@@ -20,6 +20,7 @@ namespace Orleans
         /// <returns></returns>
         public static IServiceCollection AddRepositoryStorage(this IServiceCollection services, Action<RepositoryBuilder> builer, string storageName = RepositoryStorage.DefaultName)
         {
+            //配置差异对比服务
             services.TryAddSingleton<IChangeDetector, ChangeDetector>();
             services.TryAddSingleton<IChangeManager, ChangeManager>();
             services.TryAddSingleton<IChangeManagerFactory, ChangeManagerFactory>();
@@ -28,9 +29,11 @@ namespace Orleans
                 opt.ExpirationScanFrequency = TimeSpan.FromHours(2);
             });
 
+            //配置Orleans 的存储配置
             services.TryAddSingleton<IGrainStorage>(sp => sp.GetServiceByName<IGrainStorage>(ProviderConstants.DEFAULT_STORAGE_PROVIDER_NAME));
             services.AddSingletonNamedService<IGrainStorage, RepositoryStorage>(storageName);
 
+            //对应实体的仓储配置
             var builder = new RepositoryBuilder(services);
             builer.Invoke(builder);
             return services;

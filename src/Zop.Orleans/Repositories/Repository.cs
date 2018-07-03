@@ -17,7 +17,6 @@ namespace Zop.Repositories
     public abstract class Repository<TEntity, TPrimaryKey> :
         IRepositoryStorage, IRepository<TEntity, TPrimaryKey> where TEntity : class, IEntity
     {
-        private IServiceProvider serviceProvider;
         private readonly IMemoryCache cache;
         /// <summary>
         /// 变动探测器
@@ -25,8 +24,8 @@ namespace Zop.Repositories
         protected readonly IChangeDetector ChangeDetector;
         public Repository(IServiceProvider _serviceProvider)
         {
-            this.ChangeDetector = _serviceProvider.GetService<IChangeDetector>();
-            this.cache = _serviceProvider.GetService<IMemoryCache>(); ;
+            this.ChangeDetector = _serviceProvider?.GetService<IChangeDetector>();
+            this.cache = _serviceProvider?.GetService<IMemoryCache>(); ;
         }
         /// <summary>
         /// 获取变动管理器
@@ -127,6 +126,8 @@ namespace Zop.Repositories
             }
             return e;
         }
+
+
         /// <summary>
         /// 设置线程安全锁，版本号
         /// </summary>
@@ -134,7 +135,6 @@ namespace Zop.Repositories
         private void SetVersionNo(object entity)
         {
             if (entity == null) return;
-
             //判断是否需要设置版本号
             if (typeof(AggregateConcurrencySafe<TPrimaryKey>).IsInstanceOfType(entity))
             {

@@ -12,7 +12,7 @@ namespace Zop.Domain.Values
     /// </summary>
     /// <typeparam name="T"></typeparam>
     [Serializable]
-    public class ZopList<T> : List<T>
+    public class ZopList<T> : List<T>, IValueObject
     {
         public ZopList() { }
        

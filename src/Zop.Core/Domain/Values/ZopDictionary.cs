@@ -16,7 +16,7 @@ namespace Zop.Domain.Values
     /// <typeparam name="TKey">key type</typeparam>
     /// <typeparam name="TValue">value type</typeparam>
     [Serializable]
-    public class ZopDictionary<TKey, TValue> : Dictionary<TKey, TValue>
+    public class ZopDictionary<TKey, TValue> : Dictionary<TKey, TValue>,IValueObject
     {
         protected ZopDictionary(SerializationInfo info, StreamingContext context):base(info, context)
         {

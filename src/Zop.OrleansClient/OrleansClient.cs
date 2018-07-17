@@ -133,10 +133,10 @@ namespace Zop.OrleansClient
         /// <param name="accessType"></param>
         private void SetAuthorization(AccessTokenType tokenType)
         {
-            if (tokenType == AccessTokenType.NotCredentials)
-                return;
             if (tokenType == AccessTokenType.Default)
                 tokenType = Options.DefaultTokenType;
+            if (tokenType == AccessTokenType.NotCredentials)
+                return;
             var tokenService = ServiceProvider.GetRequiredServiceByName<IAccessTokenService>((tokenType.ToString()));
             if (tokenService != null)
             {

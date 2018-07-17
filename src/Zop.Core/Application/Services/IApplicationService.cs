@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Security.Claims;
 
 namespace Zop.Application.Services
 {
@@ -11,7 +7,7 @@ namespace Zop.Application.Services
     /// </summary>
     public interface IApplicationService
     {
-        
+      
     }
 
 }

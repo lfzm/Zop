@@ -62,32 +62,11 @@ namespace Zop.Application.Services
         /// <param name="grainFactory"><see cref="IGrainFactory"/></param>
         /// <param name="primaryKey">Grain primaryKey</param>
         /// <returns></returns>
-        public static IMemoryCacheService GetCacheGrain(this IGrainFactory grainFactory, long primaryKey)
+        public static IMemoryCacheService GetCacheGrain(this IGrainFactory grainFactory)
         {
-            return grainFactory.GetGrain<IMemoryCacheService>(primaryKey);
+            return grainFactory.GetGrain<IMemoryCacheService>(Guid.NewGuid());
         }
-        /// <summary>
-        /// 获取有状态的Grain
-        /// </summary>
-        /// <typeparam name="TState">状态类型</typeparam>
-        /// <param name="grainFactory"><see cref="IGrainFactory"/></param>
-        /// <param name="primaryKey">Grain primaryKey</param>
-        /// <returns></returns>
-        public static IMemoryCacheService GetCacheGrain(this IGrainFactory grainFactory, Guid primaryKey)
-        {
-            return grainFactory.GetGrain<IMemoryCacheService>(primaryKey);
-        }
-        /// <summary>
-        /// 获取有状态的Grain
-        /// </summary>
-        /// <typeparam name="TState">状态类型</typeparam>
-        /// <param name="grainFactory"><see cref="IGrainFactory"/></param>
-        /// <param name="primaryKey">Grain primaryKey</param>
-        /// <returns></returns>
-        public static IMemoryCacheService GetCacheGrain(this IGrainFactory grainFactory, string primaryKey)
-        {
-            return grainFactory.GetGrain<IMemoryCacheService>(primaryKey);
-        }
+       
 
     }
 }

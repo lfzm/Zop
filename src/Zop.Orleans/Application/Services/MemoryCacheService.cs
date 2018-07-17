@@ -12,7 +12,7 @@ namespace Zop.Application.Services
     public class MemoryCacheService : Grain, IMemoryCacheService
     {
         ///<inheritdoc/>
-        public async Task<TEntity> ReadAsync<TEntity>(long absoluteExpiration = 300) where TEntity : class, IEntity, new()
+        public async Task<TEntity> ReadAsync<TEntity>(object grinaKey) where TEntity : class, IEntity,IEntityCache, new()
         {
             string key = typeof(TEntity).FullName + this.GetPrimaryKeyObject();
             var cache = this.ServiceProvider.GetRequiredService<IMemoryCache>();
@@ -21,30 +21,30 @@ namespace Zop.Application.Services
             if (cache.TryGetValue(key, out cached))
                 return cached;
 
-            object primaryKey = this.GetPrimaryKeyObject();
             //前往Grain获取数据
             IApplicationService<TEntity> service;
-            if (primaryKey.GetType() == typeof(long))
+            if (grinaKey.GetType() == typeof(long))
             {
-                long _primaryKey = (long)primaryKey;
+                long _primaryKey = (long)grinaKey;
                 service = this.GrainFactory.GetStateGrain<TEntity>(_primaryKey);
             }
-            else if (primaryKey.GetType() == typeof(string))
+            else if (grinaKey.GetType() == typeof(string))
             {
-                string _primaryKey = (string)primaryKey;
+                string _primaryKey = (string)grinaKey;
                 service = this.GrainFactory.GetStateGrain<TEntity>(_primaryKey);
             }
             else
-                service = this.GrainFactory.GetStateGrain<TEntity>((Guid)primaryKey);
+                service = this.GrainFactory.GetStateGrain<TEntity>((Guid)grinaKey);
 
             TEntity newCached = await service.ReadAsync();
-
+            if (newCached == null)
+                return null;
             lock (cache)
             {
                 //存储到内存中
                 if (!cache.TryGetValue(key, out cached))
                 {
-                    cache.Set(key, newCached, TimeSpan.FromSeconds(absoluteExpiration));
+                    cache.Set(key, newCached, TimeSpan.FromSeconds(newCached.Expiration()));
                     cached = newCached;
                 }
             }

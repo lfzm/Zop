@@ -10,6 +10,6 @@ namespace Zop.Domain.Entities
         /// 缓存过期时间（秒）
         /// </summary>
         /// <returns></returns>
-        int Expiration();
+        TimeSpan Expiration();
     }
 }

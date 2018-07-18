@@ -44,7 +44,7 @@ namespace Zop.Application.Services
                 //存储到内存中
                 if (!cache.TryGetValue(key, out cached))
                 {
-                    cache.Set(key, newCached, TimeSpan.FromSeconds(newCached.Expiration()));
+                    cache.Set(key, newCached, newCached.Expiration());
                     cached = newCached;
                 }
             }

@@ -23,9 +23,14 @@ namespace Zop.Application.Services
 
             //前往Grain获取数据
             IApplicationService<TEntity> service;
-            if (grinaKey.GetType() == typeof(long) || grinaKey.GetType() == typeof(int))
+            if (grinaKey.GetType() == typeof(long) )
             {
                 long _primaryKey = (long)grinaKey;
+                service = this.GrainFactory.GetStateGrain<TEntity>(_primaryKey);
+            }
+            if ( grinaKey.GetType() == typeof(int))
+            {
+                long _primaryKey = (int)grinaKey;
                 service = this.GrainFactory.GetStateGrain<TEntity>(_primaryKey);
             }
             else if (grinaKey.GetType() == typeof(string))

@@ -63,11 +63,17 @@ namespace Zop.Domain.Entities
                 else
                     return false;
             }
+           
         }
  
         public override int GetHashCode()
         {
             return HashCode;
+        }
+
+        public void SetNotTransient()
+        {
+            this.IsGenerateId = false;
         }
         /// <summary>
         /// 设置唯一标识符

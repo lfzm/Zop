@@ -32,19 +32,23 @@ namespace Zop.Repositories
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        protected Task<IChangeManager> GetChangeManagerAsync(TEntity entity)
+        protected Task<IChangeManager> GetChangeManagerAsync(TEntity newEntity)
         {
             if (ChangeDetector == null)
                 throw new ZopException("Change Detector cannot be empty");
 
             var id = (TPrimaryKey)typeof(TEntity).GetProperties().Where(f => f.Name == "Id")
-                .FirstOrDefault()?.GetValue(entity);
+                .FirstOrDefault()?.GetValue(newEntity);
             string key = typeof(TEntity).FullName + id;
-            var oleEntity = this.cache.GetOrCreate(key, e =>
-          {
-              return this.GetAsync(id).Result;
-          });
-            var cm = this.ChangeDetector.DetectChanges(entity, oleEntity);
+            var oldEntity = this.cache.GetOrCreate(key, e =>
+            {
+                return this.GetAsync(id).Result;
+            });
+
+            //差异的对比前，版本号判断
+            if (!VerifyVersionNo(oldEntity, newEntity))
+                throw new RepositoryDataException("实体修改失败，版本号不一致");
+            var cm = this.ChangeDetector.DetectChanges(newEntity, oldEntity);
             return Task.FromResult(cm);
         }
 
@@ -72,6 +76,7 @@ namespace Zop.Repositories
         /// <param name="entity">实体</param>
         /// <returns></returns>
         public abstract Task DeleteAsync(TEntity entity);
+
         public Task ClearAsync(object entity)
         {
             if (entity.GetType() != typeof(TEntity))
@@ -93,9 +98,9 @@ namespace Zop.Repositories
                     return null;
             }
             var e = await this.GetAsync((TPrimaryKey)id);
-            //存储快照
+            //快照存储
             if (e != null)
-                this.SetEntitySnapshot(e, id);
+                this.SnapshotStorage(e, id);
             return e;
         }
         public async Task<object> WriteAsync(object entity)
@@ -120,9 +125,10 @@ namespace Zop.Repositories
             //存储快照
             if (e != null)
             {
-                var id = (TPrimaryKey)typeof(TEntity).GetProperties() .Where(f => f.Name == "Id")
+                this.SetNotTransient(e);
+                var id = (TPrimaryKey)typeof(TEntity).GetProperties().Where(f => f.Name == "Id")
                     .FirstOrDefault()?.GetValue(entity);
-                this.SetEntitySnapshot(e, id);
+                this.SnapshotStorage(e, id);
             }
             return e;
         }
@@ -131,7 +137,7 @@ namespace Zop.Repositories
         /// 设置线程安全锁，版本号
         /// </summary>
         /// <param name="entity">实体</param>
-        private void SetVersionNo(object entity)
+        public void SetVersionNo(object entity)
         {
             if (entity == null) return;
             //判断是否需要设置版本号
@@ -140,11 +146,71 @@ namespace Zop.Repositories
                 ((AggregateConcurrencySafe<TPrimaryKey>)entity).VersionNo++;
             }
         }
+
         /// <summary>
-        /// 设置快照
+        /// 验证版本好
+        /// </summary>
+        /// <param name="oldEntity">旧实体</param>
+        /// <param name="newEntity">新实体</param>
+        /// <returns></returns>
+        public bool VerifyVersionNo(object oldEntity, object newEntity)
+        {
+            if (typeof(AggregateConcurrencySafe<TPrimaryKey>).IsInstanceOfType(newEntity))
+            {
+                int oldVersionNo = ((AggregateConcurrencySafe<TPrimaryKey>)oldEntity).VersionNo;
+                int newVersionNo = ((AggregateConcurrencySafe<TPrimaryKey>)newEntity).VersionNo;
+                return oldVersionNo == (newVersionNo - 1);
+            }
+            return true;
+        }
+        /// <summary>
+        /// 设置实体为非临时
+        /// </summary>
+        /// <param name="entity"></param>
+        public void SetNotTransient(object entity)
+        {
+            Type type = entity.GetType();
+            if (typeof(IEntity).IsAssignableFrom(type))
+            {
+                type.GetMethod("SetNotTransient").Invoke(entity, new Object[0]);
+            }
+            //循环清除属性修改记录器
+            var properties = type.GetProperties().Where(f =>
+            {
+                if (typeof(IEntity).IsAssignableFrom(f.PropertyType))
+                    return true;
+                if (typeof(IList).IsAssignableFrom(f.PropertyType) && typeof(IEntity).IsAssignableFrom(f.PropertyType.GenericTypeArguments[0]))
+                    return true;
+                else
+                    return false;
+            }).ToList();
+
+            if (properties.Count == 0)
+                return;
+            //循环修改实体属性中的临时状态
+            foreach (var info in properties)
+            {
+                var value = info.GetValue(entity);
+                if (value == null)
+                    continue;
+                if (typeof(IEntity).IsAssignableFrom(info.PropertyType))
+                {
+                    this.SetNotTransient(value);
+                }
+                else if (typeof(IList).IsAssignableFrom(info.PropertyType))
+                {
+                    foreach (var item in ((IList)value))
+                    {
+                        this.SetNotTransient(item);
+                    }
+                }
+            }
+        }
+        /// <summary>
+        /// 快照存储
         /// </summary>
         /// <param name="entity">实体对象</param>
-        private void SetEntitySnapshot(object entity,object id)
+        private void SnapshotStorage(object entity, object id)
         {
             if (entity == null) return;
             //变动探测器为空无需设置快照

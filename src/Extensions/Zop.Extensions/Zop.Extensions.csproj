@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>2.0.0.10626</Version>
-    <Description>Zop 基础库</Description>
+    <Version>3.0.0-bate01</Version>
+    <Description>Zop 扩展库</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <AssemblyName>Zop.Extensions</AssemblyName>
   </PropertyGroup>

@@ -220,7 +220,7 @@ namespace Zop.Extensions.Security
             }
             catch (Exception ex)
             {
-                throw new ArgumentException("此私钥证书无效");
+                throw new ArgumentException("此私钥证书无效",ex);
             }
         }
 

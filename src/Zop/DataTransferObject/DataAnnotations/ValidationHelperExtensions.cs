@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Zop.DataAnnotations
+namespace Zop.DTO
 {
     /// <summary>
     /// 验证帮助根据扩展类

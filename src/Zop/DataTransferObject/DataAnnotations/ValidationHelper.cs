@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace Zop.DataAnnotations
+namespace Zop.DTO
 {
     public class EntityValidationResult
     {

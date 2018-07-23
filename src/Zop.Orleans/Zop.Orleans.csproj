@@ -9,13 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CompareNETObjects" Version="4.55.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="2.1.1" />
     <PackageReference Include="Microsoft.Orleans.OrleansCodeGenerator.Build" Version="2.0.3" />
-    <PackageReference Include="Microsoft.Orleans.OrleansRuntime" Version="2.0.3" />
+    <PackageReference Include="Microsoft.Orleans.OrleansRuntime" Version="2.0.4" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Zop.Core\Zop.Core.csproj" />
+    <ProjectReference Include="..\Zop\Zop.csproj" />
   </ItemGroup>
 
 </Project>

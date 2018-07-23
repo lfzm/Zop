@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Zop.Orleans\Zop.Orleans.csproj" />
+    <ProjectReference Include="..\..\src\Zop\Zop.csproj" />
   </ItemGroup>
 
 </Project>

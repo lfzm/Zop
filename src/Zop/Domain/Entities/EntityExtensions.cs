@@ -1,9 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Internal;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Zop.DataAnnotations;
+using Zop.DTO;
 
 namespace Zop.Domain.Entities
 {

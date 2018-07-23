@@ -1,10 +1,7 @@
-﻿using Orleans;
-using Orleans.Streams;
+﻿using Orleans.Streams;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
-using Zop.Application.Events;
+using Zop.Domain.Events;
 
 namespace Orleans
 {

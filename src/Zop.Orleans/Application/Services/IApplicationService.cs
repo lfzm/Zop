@@ -16,14 +16,13 @@ namespace Zop.Application.Services
         /// <returns>返回状态</returns>
         [AlwaysInterleave]
         Task<TState> ReadAsync();
-
         /// <summary>
-        /// 添加实体
+        /// 写入实体（谨慎使用）
+        /// 可能会出现多线程导致数据版本问题
         /// </summary>
         /// <param name="state"></param>
         /// <returns></returns>
-        Task AddAsync(TState state);
-
+        Task WriteAsync(TState state);
         /// <summary>
         /// 清除应用服务的状态
         /// </summary>

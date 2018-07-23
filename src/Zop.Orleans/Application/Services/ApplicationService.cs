@@ -33,10 +33,8 @@ namespace Zop.Application.Services
             return Task.CompletedTask;
         }
         ///<inheritdoc/>
-        public Task AddAsync(TState state)
+        public Task WriteAsync(TState state)
         {
-            if (!state.IsTransient)
-                throw new Exception("实体不为临时对象，无法进行添加");
             base.State = state;
             return base.WriteStateAsync();
         }

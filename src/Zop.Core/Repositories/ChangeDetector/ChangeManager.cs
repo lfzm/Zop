@@ -11,7 +11,7 @@ namespace Zop.Repositories.ChangeDetector
         /// <summary>
         /// 实体变动信息
         /// </summary>
-        public IDictionary<object, ChangeEntry> ChangersEntry = new Dictionary<object, ChangeEntry>();
+        public IDictionary<int, ChangeEntry> ChangersEntry = new Dictionary<int, ChangeEntry>();
         /// <summary>
         /// 删除的实体
         /// </summary>
@@ -28,7 +28,7 @@ namespace Zop.Repositories.ChangeDetector
                 if (c != null)
                     c = change;
                 else
-                    this.ChangersEntry.Add(change.NewestEntry, change);
+                    this.ChangersEntry.Add(change.NewestEntry.GetHashCode(), change);
             }
         }
 
@@ -38,12 +38,11 @@ namespace Zop.Repositories.ChangeDetector
             this.DeleteEntry.Clear();
         }
 
-    
         public ChangeEntry GetChanger(object obj)
         {
-            if (!this.ChangersEntry.ContainsKey(obj))
+            if (!this.ChangersEntry.ContainsKey(obj.GetHashCode()))
                 return null;
-            return this.ChangersEntry[obj];
+            return this.ChangersEntry[obj.GetHashCode()];
         }
 
         public IList<ChangeEntry> GetChangers(ChangeEntryType changeType)

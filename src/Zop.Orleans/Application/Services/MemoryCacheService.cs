@@ -23,7 +23,7 @@ namespace Zop.Application.Services
 
             //前往Grain获取数据
             IApplicationService<TEntity> service;
-            if (grinaKey.GetType() == typeof(long))
+            if (grinaKey.GetType() == typeof(long) || grinaKey.GetType() == typeof(int))
             {
                 long _primaryKey = (long)grinaKey;
                 service = this.GrainFactory.GetStateGrain<TEntity>(_primaryKey);
@@ -44,7 +44,7 @@ namespace Zop.Application.Services
                 //存储到内存中
                 if (!cache.TryGetValue(key, out cached))
                 {
-                    cache.Set(key, newCached, newCached.Expiration());
+                    cache.Set(key, newCached, newCached.CasheExpiration());
                     cached = newCached;
                 }
             }

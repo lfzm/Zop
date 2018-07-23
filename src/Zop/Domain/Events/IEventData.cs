@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Zop.Application.Events
+namespace Zop.Domain.Events
 {
     /// <summary>
     /// 事件数据

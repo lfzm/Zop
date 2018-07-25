@@ -1,9 +1,13 @@
+using KellermanSoftware.CompareNetObjects.TypeComparers;
 using System;
 using System.Collections.Generic;
 using Xunit;
+using KellermanSoftware.CompareNetObjects;
+using Zop.Domain.Entities;
+using System.Linq;
 using Zop.Repositories.ChangeDetector;
 
-namespace Zop.Core.Test
+namespace Zop.Orleans.Test
 {
     public class ChangeDetectorTest
     {
@@ -12,88 +16,105 @@ namespace Zop.Core.Test
         {
 
             var date = DateTime.Now;
-            var user1 = new User
+            var user1 = new User(1)
             {
-                Id = 1,
                 Password = null,
                 Posts = new List<Post>()
-                    {
-                       new Post(){CreatedDate=date,Description=date.Ticks.ToString(),Title="≤‚ ‘1", Id=1,IsTransient=false,Author = new Author(){
-                           Title=null
-                       } },
-                          new Post(){CreatedDate=date,Description=date.Ticks.ToString(),Title="≤‚ ‘",Id=2,IsTransient=false,Author = new Author(){
+                {
+                new Post(1)
+                {
+                    CreatedDate =date,Description=date.Ticks.ToString(),Title="≤‚ ‘1",Author = new Author(1){
                            Title="author"
-                       } },
-                             new Post(){CreatedDate=date,Description=date.Ticks.ToString(),Title="≤‚ ‘",Id=3,IsTransient=false,Author = new Author(){
-                           Title="author"
-                       } },
-                                new Post(){CreatedDate=date,Description=date.Ticks.ToString(),Title="≤‚ ‘2",Id=4,IsTransient=false,Author = new Author(){
-                           Title="author"
-                       } }, new Post(){CreatedDate=date,Description=date.Ticks.ToString(),Title="≤‚ ‘b",Id=5,IsTransient=false,Author = new Author(){
-                           Title="author"
-                       } },new Post(){CreatedDate=date,Description=date.Ticks.ToString(),Title="≤‚ ‘",Id=6,IsTransient=false,Author = new Author(){
-                           Title="author"
-                       } },
-                    }
-            };
-            var user2 = new User
-            {
-                Id = 1,
-                Password = "123",
-                Posts = new List<Post>()
-                    {
-                       new Post(){CreatedDate=date,Description=date.Ticks.ToString(),Title="≤‚ ‘",Id=1,IsTransient=false,Author = new Author(){
-                           Title="author"
-                       } },
-                          new Post(){CreatedDate=date,Description=date.Ticks.ToString(),Title="≤‚ ‘",Id=2,IsTransient=false,Author = new Author(){
-                           Title="author"
-                       } },
-                             new Post(){CreatedDate=date,Description=date.Ticks.ToString(),Title="≤‚ ‘",Id=3,IsTransient=false,Author = new Author(){
-                           Title="author"
-                       } },
-                                new Post(){CreatedDate=date,Description=date.Ticks.ToString(),Title="≤‚ ‘",Id=4,IsTransient=false,Author = new Author(){
-                           Title="author"
-                       } },
-                         new Post(){CreatedDate=date,Description=date.Ticks.ToString(),Title="≤‚ ‘",Author = new Author(){
-                           Title="author2"
                        } }
-                    }
+                   ,new Post(2){CreatedDate=date,Description=date.Ticks.ToString(),Title="≤‚ ‘",Author = new Author(2)
+                   {
+                           Title="author"
+                    } }
+                    ,new Post(3)
+                    {
+                        CreatedDate =date,Description=date.Ticks.ToString(),Title="≤‚ ‘",Author = new Author(3){
+                           Title=null
+                    } }
+                    , new Post(4){CreatedDate=date,Description=date.Ticks.ToString(),Title="≤‚ ‘2",Author =null }
+                    , new Post(5){CreatedDate=date,Description=date.Ticks.ToString(),Title="≤‚ ‘b",Author =null }
+                    , new Post(6){CreatedDate=date,Description=date.Ticks.ToString(),Title="≤‚ ‘b",Author = new Author(3){ } }
+                }
             };
-        
+
+            var user2 = user1.Clone<User>();
+            user2.Password = "";
+            user2.Aaccount = null;
+            var post1 = user2.Posts.FirstOrDefault(f => f.Id == 1);
+            user2.Posts.Remove(post1);
+            var post2 = user2.Posts.FirstOrDefault(f => f.Id == 2);
+            post2.Title = "≤‚ ‘–ﬁ∏ƒ◊”º∂";
+            var post3 = user2.Posts.FirstOrDefault(f => f.Id == 3);
+            post3.Author.Title = "≤‚ ‘–ﬁ∏ƒ◊”◊”º∂";
+            var post4 = user2.Posts.FirstOrDefault(f => f.Id == 4);
+            post4.Author = new Author(1) { Title = "ÃÌº”◊”◊”º∂£¨…Ë÷√ID" };
+            var post5 = user2.Posts.FirstOrDefault(f => f.Id == 5);
+            post5.Author = new Author() { Title = "ÃÌº”◊”◊”º∂£¨≤ª…Ë÷√ID" };
+            var post6 = user2.Posts.FirstOrDefault(f => f.Id == 6);
+            post6.Author = null;
+            var post7 = new Post(7) { CreatedDate = date, Description = date.Ticks.ToString(), Title = "≤‚ ‘", Author = null };
+            user2.Posts.Add(post7);
 
 
+            CompareLogic compareLogic = new CompareLogic();
+            compareLogic.Config.MaxDifferences = int.MaxValue;
+            compareLogic.Config.CompareStaticFields = false;//æ≤Ã¨◊÷∂Œ≤ª±»Ωœ
+            compareLogic.Config.CompareStaticProperties = false;//æ≤Ã¨ Ù–‘≤ª±»Ωœ
+            compareLogic.Config.Caching = true;
+            compareLogic.Config.CustomComparers.Add(new ZopDictionaryComparer(RootComparerFactory.GetRootComparer()));
+            compareLogic.Config.CustomComparers.Add(new ZopListComparer(RootComparerFactory.GetRootComparer()));
+            compareLogic.Config.CustomComparers.Add(new EntityCollectionComparer(RootComparerFactory.GetRootComparer()));
 
-            IChangeManager manager = new ChangeManager();
-            IChangeManagerFactory managerFactory = new ChangeManagerFactory(manager);
-            IChangeDetector detector = new ChangeDetector(managerFactory);
-            manager = detector.DetectChanges(user2, user1);
+            var result = compareLogic.Compare(user1, user2);
+
+            ChangeManagerFactory changeManagerFactory = new ChangeManagerFactory();
+            IChangeManager changeManager = changeManagerFactory.Create(new EntityChange(user1, user2, 0), result);
+            var ch = changeManager.GetChange();
+            string json = ch.ToJsonString();
         }
     }
 
 
-
-    public partial class User
+    [Serializable]
+    public class User : Entity<int>
     {
-        public int Id { get; set; }
-        public string Aaccount { get; private set; } = "1";
+        public User(int id)
+        {
+            this.Id = id;
+        }
+        public string Aaccount { get; set; } = "1";
         public string Password { get; set; }
         public List<Post> Posts { get; set; }
-
     }
-
-    public class Post
+    [Serializable]
+    public class Post : Entity<int>
     {
-        public int Id { set; get; }
+        public Post(int id)
+        {
+            this.Id = id;
+        }
         public string Title { set; get; }
         public string Description { set; get; }
         public DateTime CreatedDate { set; get; }
-        public bool IsTransient { get; set; } = true;
         public Author Author { get; set; }
     }
 
-    public class Author
+    [Serializable]
+
+    public class Author : Entity<int>
     {
-        public int Id { set; get; }
+        public Author()
+        {
+
+        }
+        public Author(int id)
+        {
+            this.Id = id;
+        }
         public string Title { set; get; }
     }
 }

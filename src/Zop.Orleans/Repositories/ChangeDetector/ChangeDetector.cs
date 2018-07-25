@@ -15,7 +15,7 @@ namespace Zop.Repositories.ChangeDetector
         {
             this.changeManagerFactory = _changeManagerFactory;
         }
-        public IChangeManager DetectChanges(object newEntry, object oldEntry)
+        public IChangeManager DetectChanges(object newEntry, object oldEntry, int versionNo)
         {
             CompareLogic compareLogic = new CompareLogic();
             compareLogic.Config.MaxDifferences = int.MaxValue;
@@ -27,9 +27,8 @@ namespace Zop.Repositories.ChangeDetector
             compareLogic.Config.CustomComparers.Add(new EntityCollectionComparer(RootComparerFactory.GetRootComparer()));
 
             var result = compareLogic.Compare(oldEntry, newEntry);
-
-            
-            return this.changeManagerFactory.Create(result);
+            var entityChange = new EntityChange(oldEntry, newEntry, versionNo);
+            return this.changeManagerFactory.Create(entityChange, result);
         }
     }
 }

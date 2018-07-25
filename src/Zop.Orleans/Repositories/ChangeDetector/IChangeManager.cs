@@ -12,24 +12,23 @@ namespace Zop.Repositories.ChangeDetector
         /// <summary>
         /// 根据实体类型和唯一标示获取实体变动信息对象
         /// </summary>
-        /// <param name="obj">对象值</param>
         /// <returns></returns>
-        ChangeEntry GetChanger(object obj);
+        EntityChange GetChange();
 
         /// <summary>
         /// 根据变动类型获取实体对象
         /// </summary>
         /// <param name="changeType">变更类型</param>
         /// <returns></returns>
-        IList<ChangeEntry> GetChangers(ChangeEntryType changeType);
+        IList<EntityDifference> GetDifferences(EntityChangeType changeType);
+
         /// <summary>
-        /// 把实体变动信息添加至管理器中
+        /// 获取实体的差异
         /// </summary>
-        /// <param name="change">实体变动信息</param>
-        void AddChanger(ChangeEntry change);
-        /// <summary>
-        /// 清除所有的变更信息
-        /// </summary>
-        void ClearChanger();
+        /// <param name="entityHashCode">当前实体的哈希值</param>
+        /// <param name="sourceHashCode">源实体的哈希值</param>
+        /// <returns></returns>
+        EntityDifference GetDifference(int entityHashCode, int sourceHashCode);
+
     }
 }

@@ -41,10 +41,17 @@ namespace Zop.Repositories
                 return this.GetAsync(id).Result;
             });
 
-            //差异的对比前，版本号判断
-            if (!VerifyVersionNo(oldEntity, newEntity))
-                throw new RepositoryDataException("实体修改失败，版本号不一致");
-            var cm = this.ChangeDetector.DetectChanges(newEntity, oldEntity);
+            //验证版本
+            int newVersionNo = 0;
+            if (typeof(AggregateConcurrencySafe<TPrimaryKey>).IsInstanceOfType(newEntity))
+            {
+                int oldVersionNo = this.GetVersionNo(oldEntity);
+                newVersionNo = this.GetVersionNo(newEntity);
+                //差异的对比前，版本号判断
+                if (oldVersionNo != (newVersionNo - 1))
+                    throw new RepositoryDataException("实体修改失败，版本号不一致");
+            }
+            var cm = this.ChangeDetector.DetectChanges(newEntity, oldEntity, newVersionNo);
             return Task.FromResult(cm);
         }
 
@@ -99,7 +106,7 @@ namespace Zop.Repositories
                 this.SnapshotStorage(e, id);
             return e;
         }
-        public async Task<object> WriteAsync(object entity)
+        public async Task<object> WriteAsync(object id, object entity)
         {
             if (typeof(TEntity) != (entity.GetType()))
             {
@@ -107,7 +114,9 @@ namespace Zop.Repositories
             }
             //判断是否是领域实体，如果是领域实体，就判断是新增还在修改
             TEntity e = (TEntity)entity;
-            if (e.IsTransient)
+            //如果Grain的PrimaryKeyId和实体的唯一标示不同，则添加
+            var primaryKey = e.GetPrimaryKey();
+            if (primaryKey != id)
             {
                 //插入数据
                 e = await this.InsertAsync(e);
@@ -121,10 +130,7 @@ namespace Zop.Repositories
             //存储快照
             if (e != null)
             {
-                this.SetNotTransient(e);
-                var id = (TPrimaryKey)typeof(TEntity).GetProperties().Where(f => f.Name == "Id")
-                    .FirstOrDefault()?.GetValue(entity);
-                this.SnapshotStorage(e, id);
+                this.SnapshotStorage(e, primaryKey);
             }
             return e;
         }
@@ -142,65 +148,14 @@ namespace Zop.Repositories
                 ((AggregateConcurrencySafe<TPrimaryKey>)entity).VersionNo++;
             }
         }
-
         /// <summary>
-        /// 验证版本好
+        /// 获取版本号
         /// </summary>
-        /// <param name="oldEntity">旧实体</param>
-        /// <param name="newEntity">新实体</param>
+        /// <param name="obj">实体</param>
         /// <returns></returns>
-        public bool VerifyVersionNo(object oldEntity, object newEntity)
+        public int GetVersionNo(object obj)
         {
-            if (typeof(AggregateConcurrencySafe<TPrimaryKey>).IsInstanceOfType(newEntity))
-            {
-                int oldVersionNo = ((AggregateConcurrencySafe<TPrimaryKey>)oldEntity).VersionNo;
-                int newVersionNo = ((AggregateConcurrencySafe<TPrimaryKey>)newEntity).VersionNo;
-                return oldVersionNo == (newVersionNo - 1);
-            }
-            return true;
-        }
-        /// <summary>
-        /// 设置实体为非临时
-        /// </summary>
-        /// <param name="entity"></param>
-        public void SetNotTransient(object entity)
-        {
-            Type type = entity.GetType();
-            if (typeof(IEntity).IsAssignableFrom(type))
-            {
-                type.GetMethod("SetNotTransient").Invoke(entity, new Object[0]);
-            }
-            //循环清除属性修改记录器
-            var properties = type.GetProperties().Where(f =>
-            {
-                if (typeof(IEntity).IsAssignableFrom(f.PropertyType))
-                    return true;
-                if (typeof(IList).IsAssignableFrom(f.PropertyType) && typeof(IEntity).IsAssignableFrom(f.PropertyType.GenericTypeArguments[0]))
-                    return true;
-                else
-                    return false;
-            }).ToList();
-
-            if (properties.Count == 0)
-                return;
-            //循环修改实体属性中的临时状态
-            foreach (var info in properties)
-            {
-                var value = info.GetValue(entity);
-                if (value == null)
-                    continue;
-                if (typeof(IEntity).IsAssignableFrom(info.PropertyType))
-                {
-                    this.SetNotTransient(value);
-                }
-                else if (typeof(IList).IsAssignableFrom(info.PropertyType))
-                {
-                    foreach (var item in ((IList)value))
-                    {
-                        this.SetNotTransient(item);
-                    }
-                }
-            }
+            return ((AggregateConcurrencySafe<TPrimaryKey>)obj).VersionNo;
         }
         /// <summary>
         /// 快照存储

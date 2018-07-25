@@ -22,7 +22,6 @@ namespace Orleans
         {
             //配置差异对比服务
             services.TryAddSingleton<IChangeDetector, ChangeDetector>();
-            services.TryAddSingleton<IChangeManager, ChangeManager>();
             services.TryAddSingleton<IChangeManagerFactory, ChangeManagerFactory>();
             services.AddMemoryCache(opt =>
             {

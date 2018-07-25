@@ -15,6 +15,6 @@ namespace Zop.Repositories.ChangeDetector
         /// <param name="newEntry">新实体</param>
         /// <param name="oldEntry">旧实体</param>
         /// <returns></returns>
-        IChangeManager DetectChanges(object newEntry, object oldEntry);
+        IChangeManager DetectChanges(object newEntry, object oldEntry,int versionNo);
     }
 }

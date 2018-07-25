@@ -23,11 +23,7 @@ namespace Zop.Domain.Entities
         {
             HashCode = base.GetHashCode();
         }
-        /// <summary>
-        /// ID是否生成ID
-        /// </summary>
-        [JsonProperty]
-        private bool IsGenerateId;
+
         /// <summary>
         /// 哈希值
         /// </summary>
@@ -42,38 +38,9 @@ namespace Zop.Domain.Entities
         [JsonProperty]
         public virtual TPrimaryKey Id { get; protected set; }
 
-        /// <summary>
-        ///检查这个实体是否是临时对象的。
-        /// </summary>
-        /// <returns>True, if this entity is transient</returns>
-        [NotMapped]
-        [JsonIgnore]
-        public virtual bool IsTransient
-        {
-            get
-            {
-                if (this.IsGenerateId)
-                    return true;
-
-                TPrimaryKey defaultValue = default(TPrimaryKey);
-                if (Id == null)
-                    return true;
-                if (Id.Equals(defaultValue))
-                    return true;
-                else
-                    return false;
-            }
-           
-        }
- 
         public override int GetHashCode()
         {
             return HashCode;
-        }
-
-        public void SetNotTransient()
-        {
-            this.IsGenerateId = false;
         }
         /// <summary>
         /// 设置唯一标识符
@@ -81,10 +48,8 @@ namespace Zop.Domain.Entities
         /// <param name="id">唯一标识符</param>
         public virtual void SetId(TPrimaryKey id)
         {
-            this.IsGenerateId = true;
             this.Id = id;
         }
-
         /// <summary>
         /// 克隆实体
         /// </summary>
@@ -97,6 +62,21 @@ namespace Zop.Domain.Entities
             formatter.Serialize(stream, this);
             stream.Position = 0;
             return (TEntity)formatter.Deserialize(stream);
+        }
+
+        /// <summary>
+        /// 获取唯一标示
+        /// </summary>
+        /// <returns></returns>
+        public object GetPrimaryKey()
+        {
+            TPrimaryKey defaultValue = default(TPrimaryKey);
+            if (Id == null)
+                return null;
+            if (Id.Equals(defaultValue))
+                return null;
+            else
+                return Id;
         }
     }
 

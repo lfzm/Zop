@@ -15,6 +15,6 @@ namespace Zop.Repositories.ChangeDetector
         /// </summary>
         /// <param name="comparisonResult">比较结果</param>
         /// <returns></returns>
-        IChangeManager Create(ComparisonResult comparisonResult);
+        IChangeManager Create(EntityChange entityChange, ComparisonResult comparisonResult);
     }
 }

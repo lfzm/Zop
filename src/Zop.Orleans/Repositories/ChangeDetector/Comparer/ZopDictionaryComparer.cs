@@ -6,7 +6,7 @@ using System.Text;
 using Zop.Domain.Values;
 using System.Linq;
 
-namespace Zop.Repositories.ChangeDetector
+namespace KellermanSoftware.CompareNetObjects.TypeComparers
 {
     public class ZopDictionaryComparer : DictionaryComparer
     {

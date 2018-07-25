@@ -5,21 +5,21 @@ using System.Text;
 namespace Zop.Repositories.ChangeDetector
 {
     /// <summary>
-    /// 实体属性变动对象
+    /// 实体变动类型
     /// </summary>
-    public class ChangeEntryPropertys
+    public enum EntityChangeType
     {
         /// <summary>
-        /// 属性名称
+        /// 修改
         /// </summary>
-        public string Name { get; set; }
+        Modify,
         /// <summary>
-        /// 原来的值
+        /// 移除
         /// </summary>
-        public object OriginalValue { get; set; }
+        Remove,
         /// <summary>
-        /// 新的值
+        /// 添加
         /// </summary>
-        public object NewestValue { get; set; }
+        Addition
     }
 }

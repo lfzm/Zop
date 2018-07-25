@@ -11,48 +11,35 @@ namespace Zop.Repositories.ChangeDetector
         /// <summary>
         /// 实体变动信息
         /// </summary>
-        public IDictionary<int, ChangeEntry> ChangersEntry = new Dictionary<int, ChangeEntry>();
-        /// <summary>
-        /// 删除的实体
-        /// </summary>
-        public IList<ChangeEntry> DeleteEntry = new List<ChangeEntry>();
-
-
-        public void AddChanger(ChangeEntry change)
+        public readonly EntityChange _entityChange;
+        public ChangeManager(EntityChange entityChange)
         {
-            if (change.Type == ChangeEntryType.Remove)
-                this.DeleteEntry.Add(change);
+            this._entityChange = entityChange;
+        }
+
+        public EntityChange GetChange()
+        {
+            return _entityChange;
+        }
+
+        public IList<EntityDifference> GetDifferences(EntityChangeType changeType)
+        {
+            if (changeType == EntityChangeType.Remove)
+                return _entityChange?.DeleteEntry;
             else
             {
-                var c = this.GetChanger(change.NewestEntry);
-                if (c != null)
-                    c = change;
-                else
-                    this.ChangersEntry.Add(change.NewestEntry.GetHashCode(), change);
+                return _entityChange?.ChangeDifference.Values.ToList().Where(f => f.Type == changeType).ToList();
             }
         }
-
-        public void ClearChanger()
+        public EntityDifference GetDifference(int entityHashCode, int sourceHashCode)
         {
-            this.ChangersEntry.Clear();
-            this.DeleteEntry.Clear();
-        }
-
-        public ChangeEntry GetChanger(object obj)
-        {
-            if (!this.ChangersEntry.ContainsKey(obj.GetHashCode()))
+            string key = sourceHashCode + "_" + entityHashCode;
+            if (_entityChange.ChangeDifference.ContainsKey(key))
+                return _entityChange.ChangeDifference[key];
+            else if (_entityChange.ChangeDifference.ContainsKey(entityHashCode.ToString()))
+                return _entityChange.ChangeDifference[entityHashCode.ToString()];
+            else
                 return null;
-            return this.ChangersEntry[obj.GetHashCode()];
-        }
-
-        public IList<ChangeEntry> GetChangers(ChangeEntryType changeType)
-        {
-            if (changeType == ChangeEntryType.Remove)
-                return DeleteEntry;
-            else
-            {
-                return this.ChangersEntry.Values.ToList().Where(f => f.Type == changeType).ToList();
-            }
         }
     }
 }

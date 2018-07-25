@@ -9,11 +9,6 @@ namespace Zop.Domain.Entities
     /// </summary>
     public interface IEntity
     {
-        /// <summary>
-        /// 检查这个实体是否是临时的。
-        /// </summary>
-        /// <returns>True: 这个实体是临时的</returns>
-        bool IsTransient { get;  }
 
         /// <summary>
         /// 深度复制
@@ -21,5 +16,12 @@ namespace Zop.Domain.Entities
         /// <typeparam name="TEntity"></typeparam>
         /// <returns></returns>
         TEntity Clone<TEntity>();
+
+        /// <summary>
+        /// 获取唯一标示
+        /// </summary>
+        /// <returns></returns>
+        object GetPrimaryKey();
+
     }
 }

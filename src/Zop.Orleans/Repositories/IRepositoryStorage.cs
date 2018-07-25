@@ -16,9 +16,10 @@ namespace Zop.Repositories
         /// <summary>
         /// 写入仓储
         /// </summary>
+        /// <param name="id">标识Id</param>
         /// <param name="entity"></param>
         /// <returns></returns>
-        Task<object> WriteAsync(object entity);
+        Task<object> WriteAsync(object id, object entity);
         /// <summary>
         /// 删除仓储
         /// </summary>

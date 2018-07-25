@@ -41,7 +41,8 @@ namespace Zop.Repositories
             {
                 if (grainState == null)
                     throw new RepositoryDataException("修改的状态对象不能为空");
-                grainState.State = await this.GetRepository(grainState).WriteAsync(grainState.State);
+                object id = grainReference.GetPrimaryKeyObject();
+                grainState.State = await this.GetRepository(grainState).WriteAsync(id, grainState.State);
             }
             catch (Exception ex)
             {
@@ -63,7 +64,7 @@ namespace Zop.Repositories
                 grainState.ETag = ((IConcurrencySafe)grainState.State).VersionNo.ToString();
             }
         }
-      
+
         private IRepositoryStorage GetRepository(IGrainState grainState)
         {
             var Repository = ServiceProvider.GetServiceByName<IRepositoryStorage>(grainState.State.GetType().Name);

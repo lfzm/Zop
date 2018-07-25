@@ -42,7 +42,7 @@ namespace Zop.Repositories.ChangeDetector
         /// 实体变动信息
         /// </summary>
         [JsonProperty]
-        public IDictionary<string, EntityDifference> ChangeDifference { get; private set; } = new Dictionary<string, EntityDifference>();
+        public IDictionary<int, EntityDifference> ChangeDifference { get; private set; } = new Dictionary<int, EntityDifference>();
         /// <summary>
         /// 删除的实体
         /// </summary>

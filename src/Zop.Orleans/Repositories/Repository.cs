@@ -90,16 +90,10 @@ namespace Zop.Repositories
         }
         public async Task<object> ReadAsync(object id)
         {
-            if (id.GetType() != typeof(TPrimaryKey))
-            {
-                if (id.GetType() == typeof(long) &&
-                    typeof(TPrimaryKey) == typeof(int))
-                {
-                    id = Convert.ToInt32(id); //转换成32 Int
-                }
-                else
-                    return null;
-            }
+            id = this.ConvertPrimaryKey(id);
+            if (id == null)
+                return null;
+
             var e = await this.GetAsync((TPrimaryKey)id);
             //快照存储
             if (e != null)
@@ -116,7 +110,8 @@ namespace Zop.Repositories
             TEntity e = (TEntity)entity;
             //如果Grain的PrimaryKeyId和实体的唯一标示不同，则添加
             var primaryKey = e.GetPrimaryKey();
-            if (primaryKey != id)
+            id = this.ConvertPrimaryKey(id);
+            if (id == null || primaryKey.Equals(default(TPrimaryKey)))
             {
                 //插入数据
                 e = await this.InsertAsync(e);
@@ -157,6 +152,20 @@ namespace Zop.Repositories
         {
             return ((AggregateConcurrencySafe<TPrimaryKey>)obj).VersionNo;
         }
+
+        private object ConvertPrimaryKey(object id)
+        {
+            if (id.GetType() == typeof(TPrimaryKey))
+                return id;
+
+            if (id.GetType() == typeof(long) &&
+                typeof(TPrimaryKey) == typeof(int))
+            {
+                return Convert.ToInt32(id); //转换成32 Int
+            }
+            return null;
+        }
+
         /// <summary>
         /// 快照存储
         /// </summary>

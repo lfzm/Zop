@@ -16,6 +16,10 @@ namespace Zop.Repositories.ChangeDetector
             this.Navigation = navigation;
         }
         /// <summary>
+        /// 旧的实体
+        /// </summary>
+        public object OldEntity { get; set; }
+        /// <summary>
         /// 实体类型
         /// </summary>
         public string EntityType { get; private set; }

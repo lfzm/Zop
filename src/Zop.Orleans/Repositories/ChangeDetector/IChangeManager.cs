@@ -26,9 +26,8 @@ namespace Zop.Repositories.ChangeDetector
         /// 获取实体的差异
         /// </summary>
         /// <param name="entityHashCode">当前实体的哈希值</param>
-        /// <param name="sourceHashCode">源实体的哈希值</param>
         /// <returns></returns>
-        EntityDifference GetDifference(int entityHashCode, int sourceHashCode);
+        EntityDifference GetDifference(int entityHashCode);
 
     }
 }

@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Zop</RootNamespace>
-    <Version>3.0.0-bate02</Version>
+    <Version>3.0.0-bate11</Version>
     <Description>Zop Orleans的服务基础库</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>

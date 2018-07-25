@@ -49,9 +49,7 @@ namespace Zop.Repositories.ChangeDetector
 
             //新增数据
             EntityDifference diff = new EntityDifference(difference.Object2.GetType().FullName, EntityChangeType.Addition, difference.ParentPropertyName);
-            string key = difference.Object2.GetHashCode().ToString();
-            if (type == EntityType.ValueObject && difference.ParentObject2 != null)
-                key = key + "_" + difference.ParentObject2.GetHashCode();
+            var key = difference.Object2.GetHashCode();
             entityChange.ChangeDifference.Add(key, diff);
             return true;
         }
@@ -64,6 +62,7 @@ namespace Zop.Repositories.ChangeDetector
                 return false;
 
             var diff = new EntityDifference(difference.Object1.GetType().FullName, EntityChangeType.Remove, difference.ParentPropertyName);
+            diff.OldEntity = difference.Object1;
             entityChange.DeleteEntry.Add(diff);
             return true;
         }
@@ -72,10 +71,8 @@ namespace Zop.Repositories.ChangeDetector
         {
             object parentObj = difference.ParentObject1 != null ? difference.ParentObject1 : difference.ParentObject2;
             //生成哈希Key
-            string key = parentObj.GetHashCode().ToString();
-            
-
-            EntityDifference diff = entityChange.ChangeDifference.GetValue(key);
+            int key = parentObj.GetHashCode();
+            entityChange.ChangeDifference.TryGetValue(key, out EntityDifference diff);
             if (diff == null)
             {
                 diff = new EntityDifference(parentObj.GetType().FullName, EntityChangeType.Modify, difference.ParentPropertyName);

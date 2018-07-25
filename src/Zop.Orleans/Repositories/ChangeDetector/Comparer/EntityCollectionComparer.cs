@@ -140,6 +140,7 @@ namespace KellermanSoftware.CompareNetObjects.TypeComparers
                 PropertyName = parms.BreadCrumb
             };
             AddDifference(parms.Result, difference);
+
         }
         private void RemoveDefference(object object1, object id, CompareParms parms)
         {

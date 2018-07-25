@@ -74,7 +74,7 @@ namespace Zop.Domain.Entities
             if (Id == null)
                 return null;
             if (Id.Equals(defaultValue))
-                return null;
+                return defaultValue;
             else
                 return Id;
         }

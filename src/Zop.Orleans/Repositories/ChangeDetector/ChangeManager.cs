@@ -31,13 +31,10 @@ namespace Zop.Repositories.ChangeDetector
                 return _entityChange?.ChangeDifference.Values.ToList().Where(f => f.Type == changeType).ToList();
             }
         }
-        public EntityDifference GetDifference(int entityHashCode, int sourceHashCode)
+        public EntityDifference GetDifference(int entityHashCode)
         {
-            string key = sourceHashCode + "_" + entityHashCode;
-            if (_entityChange.ChangeDifference.ContainsKey(key))
-                return _entityChange.ChangeDifference[key];
-            else if (_entityChange.ChangeDifference.ContainsKey(entityHashCode.ToString()))
-                return _entityChange.ChangeDifference[entityHashCode.ToString()];
+            if (_entityChange.ChangeDifference.ContainsKey(entityHashCode))
+                return _entityChange.ChangeDifference[entityHashCode];
             else
                 return null;
         }

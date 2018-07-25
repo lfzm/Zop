@@ -7,9 +7,17 @@ using Zop.Domain.Entities;
 namespace Zop.Repositories
 {
     /// <summary>
-    /// 仓储基类
+    /// 仓储接口
     /// </summary>
-    public interface IRepository<TEntity, TPrimaryKey> where TEntity : class, IEntity
+    public interface IRepository
+    {
+    
+    }
+
+    /// <summary>
+    /// 仓储接口
+    /// </summary>
+    public interface IRepository<TEntity, TPrimaryKey>: IRepository  where TEntity : class, IEntity
     {
         /// <summary>
         /// 获取仓储

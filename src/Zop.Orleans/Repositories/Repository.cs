@@ -23,37 +23,6 @@ namespace Zop.Repositories
             this.ChangeDetector = _serviceProvider?.GetService<IChangeDetector>();
             this.cache = _serviceProvider?.GetService<IMemoryCache>(); ;
         }
-        /// <summary>
-        /// 获取变动管理器
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <returns></returns>
-        protected Task<IChangeManager> GetChangeManagerAsync(TEntity newEntity)
-        {
-            if (ChangeDetector == null)
-                throw new ZopException("Change Detector cannot be empty");
-
-            var id = (TPrimaryKey)typeof(TEntity).GetProperties().Where(f => f.Name == "Id")
-                .FirstOrDefault()?.GetValue(newEntity);
-            string key = typeof(TEntity).FullName + id;
-            var oldEntity = this.cache.GetOrCreate(key, e =>
-            {
-                return this.GetAsync(id).Result;
-            });
-
-            //验证版本
-            int newVersionNo = 0;
-            if (typeof(AggregateConcurrencySafe<TPrimaryKey>).IsInstanceOfType(newEntity))
-            {
-                int oldVersionNo = this.GetVersionNo(oldEntity);
-                newVersionNo = this.GetVersionNo(newEntity);
-                //差异的对比前，版本号判断
-                if (oldVersionNo != (newVersionNo - 1))
-                    throw new RepositoryDataException("实体修改失败，版本号不一致");
-            }
-            var cm = this.ChangeDetector.DetectChanges(newEntity, oldEntity, newVersionNo);
-            return Task.FromResult(cm);
-        }
 
         /// <summary>
         /// 获取仓储
@@ -100,33 +69,22 @@ namespace Zop.Repositories
                 this.SnapshotStorage(e, id);
             return e;
         }
-        public async Task<object> WriteAsync(object id, object entity)
+        public async Task<object> AddAsync(object entity)
         {
-            if (typeof(TEntity) != (entity.GetType()))
-            {
-                throw new RepositoryDataException("WriteAsync：entity is not the same type as TEntity");
-            }
-            //判断是否是领域实体，如果是领域实体，就判断是新增还在修改
-            TEntity e = (TEntity)entity;
-            //如果Grain的PrimaryKeyId和实体的唯一标示不同，则添加
-            var primaryKey = e.GetPrimaryKey();
-            id = this.ConvertPrimaryKey(id);
-            if (id == null || primaryKey.Equals(default(TPrimaryKey)))
-            {
-                //插入数据
-                e = await this.InsertAsync(e);
-            }
-            else
-            {
-                //修改数据
-                this.SetVersionNo(e);
-                e = await this.UpdateAsync(e);
-            }
+            //插入数据
+            TEntity e = await this.InsertAsync((TEntity)entity);
+            if (e != null)
+                this.SnapshotStorage(e, e.GetPrimaryKey());
+            return e;
+        }
+        public async Task<object> ModifyAsync(object entity)
+        {
+            //修改数据
+            this.SetVersionNo(entity);
+            TEntity e = await this.UpdateAsync((TEntity)entity);
             //存储快照
             if (e != null)
-            {
-                this.SnapshotStorage(e, primaryKey);
-            }
+                this.SnapshotStorage(e, e.GetPrimaryKey());
             return e;
         }
 
@@ -143,16 +101,6 @@ namespace Zop.Repositories
                 ((AggregateConcurrencySafe<TPrimaryKey>)entity).VersionNo++;
             }
         }
-        /// <summary>
-        /// 获取版本号
-        /// </summary>
-        /// <param name="obj">实体</param>
-        /// <returns></returns>
-        public int GetVersionNo(object obj)
-        {
-            return ((AggregateConcurrencySafe<TPrimaryKey>)obj).VersionNo;
-        }
-
         private object ConvertPrimaryKey(object id)
         {
             if (id.GetType() == typeof(TPrimaryKey))
@@ -165,7 +113,6 @@ namespace Zop.Repositories
             }
             return null;
         }
-
         /// <summary>
         /// 快照存储
         /// </summary>
@@ -178,6 +125,45 @@ namespace Zop.Repositories
             {
                 this.cache.Set(typeof(TEntity).FullName + id, ((IEntity)entity).Clone<TEntity>());
             }
+        }
+        /// <summary>
+        /// 获取变动管理器
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        protected Task<IChangeManager> GetChangeManagerAsync(TEntity newEntity)
+        {
+            if (ChangeDetector == null)
+                throw new ZopException("Change Detector cannot be empty");
+
+            var id = (TPrimaryKey)newEntity.GetPrimaryKey();
+            string key = typeof(TEntity).FullName + id;
+            var oldEntity = this.cache.GetOrCreate(key, e =>
+            {
+                return this.GetAsync(id).Result;
+            });
+
+            //验证版本
+            int newVersionNo = 0;
+            if (typeof(AggregateConcurrencySafe<TPrimaryKey>).IsInstanceOfType(newEntity))
+            {
+                int oldVersionNo = this.GetVersionNo(oldEntity);
+                newVersionNo = this.GetVersionNo(newEntity);
+                //差异的对比前，版本号判断
+                if (oldVersionNo != (newVersionNo - 1))
+                    throw new RepositoryDataException("实体修改失败，版本号不一致");
+            }
+            var changeManager = this.ChangeDetector.DetectChanges(newEntity, oldEntity, newVersionNo);
+            return Task.FromResult(changeManager);
+        }
+        /// <summary>
+        /// 获取版本号
+        /// </summary>
+        /// <param name="obj">实体</param>
+        /// <returns></returns>
+        public int GetVersionNo(object obj)
+        {
+            return ((AggregateConcurrencySafe<TPrimaryKey>)obj).VersionNo;
         }
     }
 }

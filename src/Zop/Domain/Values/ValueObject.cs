@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -14,6 +15,17 @@ namespace Zop.Domain.Values
     public abstract class ValueObject<TValueObject> : IEquatable<TValueObject>, IValueObject
         where TValueObject : ValueObject<TValueObject>
     {
+        public ValueObject()
+        {
+            HashCode = base.GetHashCode();
+        }
+
+        /// <summary>
+        /// 哈希值
+        /// </summary>
+        [JsonProperty]
+        private int HashCode;
+
         /// <summary>
         /// 是否相等
         /// </summary>
@@ -53,7 +65,7 @@ namespace Zop.Domain.Values
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return HashCode;
         }
         public static bool operator ==(ValueObject<TValueObject> x, ValueObject<TValueObject> y)
         {

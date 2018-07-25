@@ -27,6 +27,8 @@ namespace Zop.Repositories
         public Task ClearStateAsync(string grainType, GrainReference grainReference, IGrainState grainState)
         {
             this.GetRepository(grainState).ClearAsync(grainState.State);
+            grainState.State = null;
+            this.SetETag(grainState);
             return Task.CompletedTask;
         }
         public async Task ReadStateAsync(string grainType, GrainReference grainReference, IGrainState grainState)
@@ -41,8 +43,12 @@ namespace Zop.Repositories
             {
                 if (grainState == null)
                     throw new RepositoryDataException("修改的状态对象不能为空");
-                object id = grainReference.GetPrimaryKeyObject();
-                grainState.State = await this.GetRepository(grainState).WriteAsync(id, grainState.State);
+
+                if (grainState.ETag.Equals("0"))
+                    grainState.State = await this.GetRepository(grainState).AddAsync(grainState.State);
+                else
+                    grainState.State = await this.GetRepository(grainState).ModifyAsync(grainState.State);
+                this.SetETag(grainState);
             }
             catch (Exception ex)
             {
@@ -58,11 +64,11 @@ namespace Zop.Repositories
         private void SetETag(IGrainState grainState)
         {
             if (grainState.State == null)
-                return;
-            if (typeof(IConcurrencySafe).IsAssignableFrom(grainState.State.GetType()))
-            {
-                grainState.ETag = ((IConcurrencySafe)grainState.State).VersionNo.ToString();
-            }
+                grainState.ETag = "0";
+
+            else
+                grainState.ETag = "1";
+
         }
 
         private IRepositoryStorage GetRepository(IGrainState grainState)

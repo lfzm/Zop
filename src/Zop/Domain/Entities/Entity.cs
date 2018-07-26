@@ -11,7 +11,6 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Zop.Domain.Entities
 {
-
     /// <summary>
     /// IEntity接口的基本实现  一个实体可以继承这个类直接实现到IEntity接口。
     /// </summary>
@@ -19,17 +18,6 @@ namespace Zop.Domain.Entities
     [Serializable]
     public abstract class Entity<TPrimaryKey> : IEntity<TPrimaryKey>
     {
-        public Entity()
-        {
-            HashCode = base.GetHashCode();
-        }
-
-        /// <summary>
-        /// 哈希值
-        /// </summary>
-        [JsonProperty]
-        private int HashCode;
-
         /// <summary>
         /// 此实体的唯一标识符
         /// </summary>
@@ -40,7 +28,7 @@ namespace Zop.Domain.Entities
 
         public override int GetHashCode()
         {
-            return HashCode;
+            return base.GetHashCode();
         }
         /// <summary>
         /// 设置唯一标识符
@@ -63,7 +51,6 @@ namespace Zop.Domain.Entities
             stream.Position = 0;
             return (TEntity)formatter.Deserialize(stream);
         }
-
         /// <summary>
         /// 获取唯一标示
         /// </summary>

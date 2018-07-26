@@ -15,16 +15,6 @@ namespace Zop.Domain.Values
     public abstract class ValueObject<TValueObject> : IEquatable<TValueObject>, IValueObject
         where TValueObject : ValueObject<TValueObject>
     {
-        public ValueObject()
-        {
-            HashCode = base.GetHashCode();
-        }
-
-        /// <summary>
-        /// 哈希值
-        /// </summary>
-        [JsonProperty]
-        private int HashCode;
 
         /// <summary>
         /// 是否相等
@@ -65,8 +55,10 @@ namespace Zop.Domain.Values
 
         public override int GetHashCode()
         {
-            return HashCode;
+            return base.GetHashCode(); ;
         }
+
+        public abstract TValueObject Clone();
         public static bool operator ==(ValueObject<TValueObject> x, ValueObject<TValueObject> y)
         {
             if (ReferenceEquals(x, y))

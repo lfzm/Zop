@@ -69,7 +69,7 @@ namespace Zop.Repositories.ChangeDetector
 
         private void ModifyDiff(EntityChange entityChange, Difference difference)
         {
-            object parentObj = difference.ParentObject1 != null ? difference.ParentObject1 : difference.ParentObject2;
+            object parentObj = difference.ParentObject2;
             //生成哈希Key
             int key = parentObj.GetHashCode();
             entityChange.ChangeDifference.TryGetValue(key, out EntityDifference diff);

@@ -63,11 +63,11 @@ namespace Zop.Repositories
             if (id == null)
                 return null;
 
-            var e = await this.GetAsync((TPrimaryKey)id);
+            TEntity e = await this.GetAsync((TPrimaryKey)id);
             //快照存储
             if (e != null)
                 this.SnapshotStorage(e, id);
-            return e;
+            return e.Clone<TEntity>();
         }
         public async Task<object> AddAsync(object entity)
         {
@@ -75,7 +75,7 @@ namespace Zop.Repositories
             TEntity e = await this.InsertAsync((TEntity)entity);
             if (e != null)
                 this.SnapshotStorage(e, e.GetPrimaryKey());
-            return e;
+            return e.Clone<TEntity>();
         }
         public async Task<object> ModifyAsync(object entity)
         {
@@ -85,7 +85,7 @@ namespace Zop.Repositories
             //存储快照
             if (e != null)
                 this.SnapshotStorage(e, e.GetPrimaryKey());
-            return e;
+            return e.Clone<TEntity>();
         }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace Zop.Repositories
             //变动探测器为空无需设置快照
             if (ChangeDetector != null)
             {
-                this.cache.Set(typeof(TEntity).FullName + id, ((IEntity)entity).Clone<TEntity>());
+                this.cache.Set(typeof(TEntity).FullName + id, entity);
             }
         }
         /// <summary>

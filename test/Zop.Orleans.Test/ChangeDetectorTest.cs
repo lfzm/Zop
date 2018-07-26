@@ -75,6 +75,9 @@ namespace Zop.Orleans.Test
             IChangeManager changeManager = changeManagerFactory.Create(new EntityChange(user1, user2, 0), result);
             var ch = changeManager.GetChange();
             string json = ch.ToJsonString();
+
+            User user3 = json.ToFromJson<User>();
+
         }
     }
 

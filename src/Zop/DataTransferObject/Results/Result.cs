@@ -141,9 +141,6 @@ namespace Zop
             result.To(Result.ReSuccess());
             return result;
         }
-
-
-
     }
     /// <summary>
     /// 实体结果

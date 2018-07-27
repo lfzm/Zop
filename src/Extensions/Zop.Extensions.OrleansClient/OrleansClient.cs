@@ -12,56 +12,45 @@ namespace Zop.Extensions.OrleansClient
 {
     public class OrleansClient : IOrleansClient
     {
+        private readonly int InitializeAttemptsBeforeFailing=10;
         private readonly Dictionary<string, IClusterClient> clients = new Dictionary<string, IClusterClient>();
         private readonly IServiceProvider ServiceProvider;
-        private readonly OrleansAuthOptions Options;
         private readonly ILogger Logger;
-        public OrleansClient(IServiceProvider serviceProvider, IOptions<OrleansAuthOptions> options, ILogger<OrleansClient> logger)
+        public OrleansClient(IServiceProvider serviceProvider, ILogger<OrleansClient> logger)
         {
             this.Logger = logger;
             this.ServiceProvider = serviceProvider;
-            this.Options = options?.Value;
 
         }
 
-        public TGrainInterface GetGrain<TGrainInterface>(Guid primaryKey, AccessTokenType accessType = AccessTokenType.Default, string grainClassNamePrefix = null) where TGrainInterface : IGrainWithGuidKey
+        public TGrainInterface GetGrain<TGrainInterface>(Guid primaryKey, string grainClassNamePrefix = null) where TGrainInterface : IGrainWithGuidKey
         {
             var i = this.GetClusterClient<TGrainInterface>().GetGrain<TGrainInterface>(primaryKey, grainClassNamePrefix);
-            this.SetAuthorization(accessType);
-            return i;
-
-        }
-
-        public TGrainInterface GetGrain<TGrainInterface>(long primaryKey, AccessTokenType accessType = AccessTokenType.Default, string grainClassNamePrefix = null) where TGrainInterface : IGrainWithIntegerKey
-        {
-            var i = this.GetClusterClient<TGrainInterface>().GetGrain<TGrainInterface>(primaryKey, grainClassNamePrefix);
-            this.SetAuthorization(accessType);
             return i;
         }
 
-        public TGrainInterface GetGrain<TGrainInterface>(string primaryKey, AccessTokenType accessType = AccessTokenType.Default, string grainClassNamePrefix = null) where TGrainInterface : IGrainWithStringKey
+        public TGrainInterface GetGrain<TGrainInterface>(long primaryKey, string grainClassNamePrefix = null) where TGrainInterface : IGrainWithIntegerKey
         {
             var i = this.GetClusterClient<TGrainInterface>().GetGrain<TGrainInterface>(primaryKey, grainClassNamePrefix);
-            this.SetAuthorization(accessType);
             return i;
-
         }
 
-        public TGrainInterface GetGrain<TGrainInterface>(Guid primaryKey, string keyExtension, AccessTokenType accessType = AccessTokenType.Default, string grainClassNamePrefix = null) where TGrainInterface : IGrainWithGuidCompoundKey
+        public TGrainInterface GetGrain<TGrainInterface>(string primaryKey,  string grainClassNamePrefix = null) where TGrainInterface : IGrainWithStringKey
+        {
+            var i = this.GetClusterClient<TGrainInterface>().GetGrain<TGrainInterface>(primaryKey, grainClassNamePrefix);
+            return i;
+        }
+
+        public TGrainInterface GetGrain<TGrainInterface>(Guid primaryKey, string keyExtension,  string grainClassNamePrefix = null) where TGrainInterface : IGrainWithGuidCompoundKey
         {
             var i = this.GetClusterClient<TGrainInterface>().GetGrain<TGrainInterface>(primaryKey, keyExtension, grainClassNamePrefix);
-            this.SetAuthorization(accessType);
             return i;
         }
-
-        public TGrainInterface GetGrain<TGrainInterface>(long primaryKey, string keyExtension, AccessTokenType accessType = AccessTokenType.Default, string grainClassNamePrefix = null) where TGrainInterface : IGrainWithIntegerCompoundKey
+        public TGrainInterface GetGrain<TGrainInterface>(long primaryKey, string keyExtension,  string grainClassNamePrefix = null) where TGrainInterface : IGrainWithIntegerCompoundKey
         {
             var i = this.GetClusterClient<TGrainInterface>().GetGrain<TGrainInterface>(primaryKey, keyExtension, grainClassNamePrefix);
-            this.SetAuthorization(accessType);
             return i;
-
         }
-
 
         /// <summary>
         /// 获取Orleans ClusterClient
@@ -92,25 +81,23 @@ namespace Zop.Extensions.OrleansClient
                                 client = clients[name];
                         }
                     }
-
                     if (!client.IsInitialized)
                     {
                         //客户端未初始化，连接服务端
                         client.Connect().Wait();
                         Logger.LogDebug($"Connection {name} Sucess...");
                     }
-
                 }
                 catch (Exception ex)
                 {
                     Logger.LogError(ex.Message);
                     attempt++;
-                    if (attempt <= this.Options.InitializeAttemptsBeforeFailing)
+                    if (attempt <= this.InitializeAttemptsBeforeFailing)
                     {
                         client = BuilderClient(name);
                         clients[name] = client;
 
-                        Logger.LogDebug($"Attempt {attempt} of " + this.Options.InitializeAttemptsBeforeFailing + " failed to initialize the Orleans client.");
+                        Logger.LogDebug($"Attempt {attempt} of " + this.InitializeAttemptsBeforeFailing + " failed to initialize the Orleans client.");
                         Task.Delay(TimeSpan.FromSeconds(4)).Wait();
                         continue;
                     }
@@ -127,21 +114,6 @@ namespace Zop.Extensions.OrleansClient
             return builder.Build();
         }
 
-        /// <summary>
-        /// 设置授权码
-        /// </summary>
-        /// <param name="accessType"></param>
-        private void SetAuthorization(AccessTokenType tokenType)
-        {
-            if (tokenType == AccessTokenType.Default)
-                tokenType = Options.DefaultTokenType;
-            if (tokenType == AccessTokenType.NotCredentials)
-                return;
-            var tokenService = ServiceProvider.GetRequiredServiceByName<IAccessTokenService>((tokenType.ToString()));
-            if (tokenService != null)
-            {
-                RequestContext.Set("Authorization", string.Format("Bearer {0}", tokenService.AccessToken));
-            }
-        }
+     
     }
 }

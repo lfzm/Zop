@@ -26,18 +26,6 @@ namespace Zop.Extensions.OrleansClient
         /// <param name="builder"></param>
         /// <returns></returns>
         IOrleansClientBuilder AddClient(IConfiguration configuration, Action<IClientBuilder> builder = null);
-        /// <summary>
-        /// 添加客户端授权
-        /// </summary>
-        /// <param name="options"></param>
-        /// <returns></returns>
-        IOrleansClientBuilder AddAuthentication(Action<OrleansAuthOptions> options);
-        /// <summary>
-        /// 添加客户端授权
-        /// </summary>
-        /// <param name="configuration">配置</param>
-        /// <returns></returns>
-        IOrleansClientBuilder AddAuthentication(IConfiguration configuration);
-
+       
     }
 }

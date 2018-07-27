@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -15,11 +16,11 @@ namespace Zop.Extensions.OrleansClient
     public class OrleansClientBuilder : IOrleansClientBuilder
     {
         private readonly IServiceCollection services;
+
         public OrleansClientBuilder(IServiceCollection services)
         {
             this.services = services;
         }
-
 
         public IOrleansClientBuilder AddClient(Action<OrleansClientOptions> options, Action<IClientBuilder> builder = null)
         {
@@ -56,35 +57,23 @@ namespace Zop.Extensions.OrleansClient
                     });
                 builder?.Invoke(build);
 
-                //配置本地集群
-                if (options.IsLocalHost)
-                    build.UseLocalhostClustering();
                 //配置静态网关
-                else if (options.StaticGatewayList.Count > 0)
+                if (options.StaticGatewayList.Count > 0)
                 {
                     build.UseStaticClustering((StaticGatewayListProviderOptions opt) =>
                     {
                         foreach (var gateway in options.StaticGatewayList)
                         {
-                            opt.Gateways.Add( gateway);
+                            opt.Gateways.Add(gateway);
                         }
                     });
                 }
-            
+
                 return build;
             });
             return this;
         }
-        public IOrleansClientBuilder AddAuthentication(Action<OrleansAuthOptions> options)
-        {
-            this.services.AddOptions().Configure(options);
-            return this;
-        }
 
-        public IOrleansClientBuilder AddAuthentication(IConfiguration configuration)
-        {
-            this.services.AddOptions().Configure<OrleansAuthOptions>(configuration);
-            return this;
-        }
+   
     }
 }

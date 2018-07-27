@@ -20,10 +20,6 @@ namespace Zop.Extensions.OrleansClient.Configuration
         /// </summary>
         public string ClusterId { get; set; }
         /// <summary>
-        /// 是否为本地服务
-        /// </summary>
-        public bool IsLocalHost { get; set; } = false;
-        /// <summary>
         /// 客户端网关列表
         /// </summary>
         public List<Uri> StaticGatewayList { get; set; }

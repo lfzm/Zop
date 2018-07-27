@@ -67,7 +67,7 @@ namespace Zop.Repositories
             //快照存储
             if (e != null)
                 this.SnapshotStorage(e, id);
-            return e.Clone<TEntity>();
+            return e?.Clone<TEntity>();
         }
         public async Task<object> AddAsync(object entity)
         {
@@ -75,7 +75,7 @@ namespace Zop.Repositories
             TEntity e = await this.InsertAsync((TEntity)entity);
             if (e != null)
                 this.SnapshotStorage(e, e.GetPrimaryKey());
-            return e.Clone<TEntity>();
+            return e?.Clone<TEntity>();
         }
         public async Task<object> ModifyAsync(object entity)
         {
@@ -85,7 +85,7 @@ namespace Zop.Repositories
             //存储快照
             if (e != null)
                 this.SnapshotStorage(e, e.GetPrimaryKey());
-            return e.Clone<TEntity>();
+            return e?.Clone<TEntity>();
         }
 
         /// <summary>

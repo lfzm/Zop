@@ -12,7 +12,7 @@ namespace Zop.DTO
         /// <summary>
         /// 结果实体类
         /// </summary>
-        public ResultResponseDto(): base(true,"success", ResultCodes.HandlerSuccess)
+        public ResultResponseDto(): base("success", ResultCodes.HandlerSuccess)
         {
 
         }

@@ -14,7 +14,7 @@ namespace Zop
         public Result() { }
         public Result(string message, string status = ResultCodes.HandlerSuccess)
         {
-            this.SubCode = ResultCodes.HandlerSuccess;
+            this.SubCode = status;
             this.SubMsg = message;
         }
         /// <summary>

@@ -31,7 +31,7 @@ namespace System
         /// <param name="isFlag">是否二进制取和</param>
         /// <param name="operate">多个描述分隔符</param>
         /// <returns></returns>
-        public static string GetDesp(this Enum en, bool isFlag = false, string operate = ",")
+        public static string GetDesp(this Enum en, bool isFlag, string operate)
         {
             var values = en.GetType().ToEnumDirs();
             int current = (int)Enum.Parse(en.GetType(), en.ToString());
@@ -39,7 +39,6 @@ namespace System
             if (isFlag)
             {
                 StringBuilder strResult = new StringBuilder();
-
                 foreach (var value in values)
                 {
                     int tempKey = value.Key.ToInt32();
@@ -54,11 +53,17 @@ namespace System
                 }
                 return strResult.ToString();
             }
-
             KeyValuePair<string, string> keypair = values.FirstOrDefault(e => e.Key == current.ToString());
             return keypair.Key == null ? "不存在的枚举值" : keypair.Value;
         }
-
+        /// <summary>
+        /// 获取描述
+        /// </summary>
+        /// <returns></returns>
+        public static string GetDesp(this Enum en)
+        {
+            return en.GetDesp(false, ",");
+        }
 
         private static ConcurrentDictionary<string, Dictionary<string, string>> enumDirs
            = new ConcurrentDictionary<string, Dictionary<string, string>>();

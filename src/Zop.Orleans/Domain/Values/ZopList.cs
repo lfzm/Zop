@@ -15,7 +15,7 @@ namespace Zop.Domain.Values
     public class ZopList<T> : List<T>, IValueObject
     {
         public ZopList() { }
-       
+        public ZopList(List<T> collection) : base(collection) { }
         [NotMapped]
         public new int Capacity { get => base.Capacity; set => base.Capacity = value; }
 

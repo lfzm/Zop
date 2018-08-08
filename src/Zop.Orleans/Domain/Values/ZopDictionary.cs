@@ -22,6 +22,7 @@ namespace Zop.Domain.Values
         {
 
         }
+        public ZopDictionary(Dictionary<TKey, TValue> dictionary) : base(dictionary) { }
         public ZopDictionary() { }
 
         [MaxLength(20000)]

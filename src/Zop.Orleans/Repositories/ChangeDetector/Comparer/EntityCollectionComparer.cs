@@ -82,7 +82,7 @@ namespace KellermanSoftware.CompareNetObjects.TypeComparers
                     continue;
 
                 var object2 = object2s[key];
-                this.AdditionDifference(object2,  parms);
+                this.AdditionDifference(object2, parms);
             }
         }
 
@@ -110,8 +110,12 @@ namespace KellermanSoftware.CompareNetObjects.TypeComparers
             {
                 var value = objects.Current;
                 var primaryKey = value.GetType().GetMethod("GetPrimaryKey").Invoke(value, new object[0]);
+
+                var primaryKeyType = primaryKey.GetType();
+                var defaultValue = primaryKeyType.IsValueType ? Activator.CreateInstance(primaryKeyType) : null;
+
                 //唯一标示为空，标示为添加数据
-                if (primaryKey == null)
+                if (primaryKey == defaultValue)
                 {
                     this.AdditionDifference(value, parms);
                     continue;

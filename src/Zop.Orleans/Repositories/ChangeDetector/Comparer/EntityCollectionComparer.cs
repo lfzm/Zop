@@ -115,7 +115,7 @@ namespace KellermanSoftware.CompareNetObjects.TypeComparers
                 var defaultValue = primaryKeyType.IsValueType ? Activator.CreateInstance(primaryKeyType) : null;
 
                 //唯一标示为空，标示为添加数据
-                if (primaryKey == defaultValue)
+                if (primaryKey.Equals( defaultValue))
                 {
                     this.AdditionDifference(value, parms);
                     continue;

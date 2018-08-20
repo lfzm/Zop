@@ -53,6 +53,7 @@ namespace Zop.Application.Services
                     cached = newCached;
                 }
             }
+            this.DeactivateOnIdle();
             return cached;
         }
     }

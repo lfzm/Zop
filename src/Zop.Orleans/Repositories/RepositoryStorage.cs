@@ -41,7 +41,6 @@ namespace Zop.Repositories
         {
             try
             {
-               
                 if (grainState == null)
                     throw new RepositoryDataException("修改的状态对象不能为空");
 
@@ -53,6 +52,7 @@ namespace Zop.Repositories
             }
             catch (Exception ex)
             {
+                await this.ReadStateAsync(grainType, grainReference, grainState);
                 var data = new
                 {
                     data = grainState,

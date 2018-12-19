@@ -3,14 +3,13 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Zop</RootNamespace>
-    <Version>3.0.1</Version>
+    <Version>3.1.0-bate2</Version>
     <Description>Zop Orleans的服务基础库</Description>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CompareNETObjects" Version="4.55.0" />
-    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="2.1.2" />
     <PackageReference Include="Microsoft.Orleans.OrleansCodeGenerator.Build" Version="2.0.3" />
     <PackageReference Include="Microsoft.Orleans.OrleansRuntime" Version="2.0.4" />
   </ItemGroup>

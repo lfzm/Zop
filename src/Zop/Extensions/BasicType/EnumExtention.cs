@@ -28,35 +28,19 @@ namespace System
         /// 获取描述
         /// </summary>
         /// <param name="en">枚举对象</param>
-        /// <param name="isFlag">是否二进制取和</param>
-        /// <param name="operate">多个描述分隔符</param>
         /// <returns></returns>
-        public static string GetDesp(this Enum en, bool isFlag = false, string operate = ",")
+        public static string GetDescription(this Enum en)
         {
-            var values = en.GetType().ToEnumDirs();
-            int current = (int)Enum.Parse(en.GetType(), en.ToString());
-
-            if (isFlag)
+            var type = en.GetType();
+            var name = en.ToString();
+            var attr = type.GetField(name).GetCustomAttributes(typeof(ALDescriptAttribute), false);
+            if (attr.Length > 0)
+                return ((ALDescriptAttribute)attr[0]).Description;
+            else
             {
-                StringBuilder strResult = new StringBuilder();
-
-                foreach (var value in values)
-                {
-                    int tempKey = value.Key.ToInt32();
-                    if ((tempKey & current) == tempKey)
-                    {
-                        if (strResult.Length != 0)
-                        {
-                            strResult.Append(operate);
-                        }
-                        strResult.Append(value.Value);
-                    }
-                }
-                return strResult.ToString();
+                attr = type.GetField(name).GetCustomAttributes(typeof(DescriptionAttribute), false);
+                return attr == null ? name : ((DescriptionAttribute)attr[0]).Description;
             }
-
-            KeyValuePair<string, string> keypair = values.FirstOrDefault(e => e.Key == current.ToString());
-            return keypair.Key == null ? "不存在的枚举值" : keypair.Value;
         }
 
 
@@ -66,38 +50,41 @@ namespace System
         /// <summary>
         /// 获取枚举字典列表
         /// </summary>
-        /// <param name="enType">枚举类型</param>
+        /// <param name="en">枚举类型</param>
         /// <param name="isIntValue">返回枚举值是否是int类型</param>
         /// <returns></returns>
-        public static Dictionary<string, string> ToEnumDirs(this Type enType, bool isIntValue = true)
+        public static Dictionary<string, string> GetDescriptionList(this Enum en, bool isIntValue = true)
         {
-            if (!enType.IsEnum)
-                throw new ArgumentException("获取枚举字典，参数必须是枚举类型！");
-
+            var enType = en.GetType();
             string key = string.Concat(enType.FullName, isIntValue);
-            Dictionary<string, string> dirs;
-            enumDirs.TryGetValue(key, out dirs);
 
-            if (dirs != null)
-                return dirs.Copy();
+            Dictionary<string, string> enums = enumDirs.GetOrAdd(key, (k) =>
+              {
+                  var dirs = new Dictionary<string, string>();
+                  var values = Enum.GetValues(enType);
+                  foreach (var value in values)
+                  {
+                      var name = value.ToString();
+                      string resultValue = isIntValue ? ((int)value).ToString() : name;
 
-            dirs = new Dictionary<string, string>();
-            var values = Enum.GetValues(enType);
+                      string description;
+                      var attr = enType.GetField(name).GetCustomAttributes(typeof(ALDescriptAttribute), false);
+                      if (attr.Length > 0)
+                          description = ((ALDescriptAttribute)attr[0]).Description;
+                      else
+                      {
+                          attr = enType.GetField(name).GetCustomAttributes(typeof(DescriptionAttribute), false);
+                          description = attr == null ? name : ((DescriptionAttribute)attr[0]).Description;
+                      }
+                      dirs.Add(resultValue, description);
+                  }
+                  return dirs;
+              });
 
-            foreach (var value in values)
-            {
-                var name = Enum.GetName(enType, value);
-                string resultValue = isIntValue ? ((int)value).ToString() : value.ToString();
-
-                var attr = enType.GetField(name).GetCustomAttributes(typeof(ALDescriptAttribute), false);
-                if (attr.Length == 0)
-                {
-                    attr = enType.GetField(name).GetCustomAttributes(typeof(DescriptionAttribute), false);
-                }
-                dirs.Add(resultValue, attr == null ? name : ((ALDescriptAttribute)attr[0]).Description);
-            }
-            enumDirs.TryAdd(key, dirs);
-            return dirs.Copy();
+            if (enums != null)
+                return enums.Copy();
+            else
+                return enums;
         }
         /// <summary>
         /// 枚举直接转换

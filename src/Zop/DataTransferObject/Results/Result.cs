@@ -9,36 +9,30 @@ namespace Zop
     /// <summary>
     /// 结果对象
     /// </summary>
-    public class Result 
+    public class Result
     {
         public Result() { }
-        public Result(bool success, string message, string status = ResultCodes.HandlerSuccess)
+        public Result(string message, string status = ResultCodes.HandlerSuccess)
         {
-            this.Success = success;
-            if (this.Success)
-                this.SubCode = ResultCodes.HandlerSuccess;
-            else
-            {
-                if (this.SubCode == ResultCodes.HandlerSuccess)
-                    this.Success = true;
-                this.SubCode = status;
-            }
+            this.SubCode = status;
             this.SubMsg = message;
         }
-        public Result(string message, string status) : this(false, message, status)
+        /// <summary>
+        /// 执行是否成功
+        /// </summary>
+        [JsonIgnore]
+        public bool Success
         {
-
+            get
+            {
+                return this.SubCode == ResultCodes.HandlerSuccess;
+            }
         }
         /// <summary>
         /// 业务返回码
         /// </summary>
         [JsonProperty(PropertyName = "sub_code")]
         public string SubCode { get; set; }
-        /// <summary>
-        /// 执行是否成功
-        /// </summary>
-        [JsonIgnore]
-        public bool Success { get; set; }
         /// <summary>
         /// 执行返回消息
         /// </summary>
@@ -49,23 +43,19 @@ namespace Zop
         /// 转换实体
         /// </summary>
         /// <param name="result"></param>
-        public void To(Result result)
+        protected void To(Result result)
         {
             this.SubCode = result.SubCode;
-            this.Success = result.Success;
             this.SubMsg = result.SubMsg;
         }
-
         /// <summary>
-        /// 创建返回信息
+        /// 转换实体
         /// </summary>
-        /// <param name="success">是否成功</param>
-        /// <param name="message">结果消息</param>
-        /// <param name="status">结果状态</param>
-        /// <returns></returns>
-        public static Result Create(bool success, string message, string status)
+        /// <param name="result"></param>
+        protected void To(string message, string status)
         {
-            return new Result(success, message, status);
+            this.SubCode = status;
+            this.SubMsg = message;
         }
 
         /// <summary>
@@ -87,7 +77,6 @@ namespace Zop
         {
             return new Result(message, ResultCodes.HandlerFailure);
         }
-
         /// <summary>
         /// 创建返回信息（返回处理失败）
         /// </summary>
@@ -96,7 +85,7 @@ namespace Zop
         public static T ReFailure<T>(Result result) where T : Result, new()
         {
             T r = new T();
-            r.To(Result.ReFailure(result.SubMsg, result.SubCode));
+            r.To(result);
             return r;
         }
         /// <summary>
@@ -108,10 +97,9 @@ namespace Zop
         public static T ReFailure<T>(string message, string status) where T : Result, new()
         {
             T result = new T();
-            result.To(Result.ReFailure(message, status));
+            result.To(message, status);
             return result;
         }
-       
         /// <summary>
         /// 创建返回信息（返回处理失败）
         /// </summary>
@@ -120,16 +108,17 @@ namespace Zop
         public static T ReFailure<T>(string message) where T : Result, new()
         {
             T result = new T();
-            result.To(Result.ReFailure(message, ResultCodes.HandlerFailure));
+            result.To(message, ResultCodes.HandlerFailure);
             return result;
         }
+
         /// <summary>
         /// 创建成功的返回消息
         /// </summary>
         /// <returns></returns>
         public static Result ReSuccess()
         {
-            return new Result(true, "success");
+            return new Result(ResultCodes.HandlerSuccess, ResultCodes.HandlerSuccess);
         }
         /// <summary>
         /// 创建成功的返回消息
@@ -138,12 +127,9 @@ namespace Zop
         public static T ReSuccess<T>() where T : Result, new()
         {
             T result = new T();
-            result.To(Result.ReSuccess());
+            result.To(ResultCodes.HandlerSuccess, ResultCodes.HandlerSuccess);
             return result;
         }
-
-
-
     }
     /// <summary>
     /// 实体结果
@@ -154,18 +140,20 @@ namespace Zop
         /// <summary>
         /// 实体结果
         /// </summary>
-        public Result()
-        {
-
-        }
+        public Result() { }
         /// <summary>
         /// 实体结果
         /// </summary>
         /// <param name="data"></param>
-        public Result(T data) : base(true, "success")
+        public Result(T data) : base(ResultCodes.HandlerSuccess)
         {
             this.Data = data;
         }
+        public Result(T data, string message, string status = ResultCodes.HandlerSuccess) : base(message, status)
+        {
+            this.Data = data;
+        }
+
         /// <summary>
         /// 返回对象
         /// </summary>
@@ -173,14 +161,47 @@ namespace Zop
         public T Data { get; set; }
 
         /// <summary>
-        /// 创建返回信息
+        /// 创建成功的返回消息
         /// </summary>
-        /// <typeparam name="TData">返回对象</typeparam>
-        /// <param name="data">返回对象</param>
         /// <returns></returns>
-        public static Result<TData> Create<TData>(TData data)
+        public static Result<T> ReSuccess(T data)
         {
-            return new Result<TData>(data);
+            return new Result<T>(data);
+        }
+
+        /// <summary>
+        /// 创建返回信息（返回处理失败）
+        /// </summary>
+        /// <param name="message">结果消息</param>
+        /// <param name="status">结果状态</param>
+        /// <returns></returns>
+        public new static Result<T> ReFailure(string message, string status)
+        {
+            Result<T> result = new Result<T>();
+            result.To(message, status);
+            return result;
+        }
+        /// <summary>
+        /// 创建返回信息（返回处理失败）
+        /// </summary>
+        /// <param name="message">结果消息</param>
+        /// <returns></returns>
+        public new static Result<T> ReFailure(string message)
+        {
+            Result<T> result = new Result<T>();
+            result.To(message, ResultCodes.HandlerFailure);
+            return result;
+        }
+        /// <summary>
+        /// 创建返回信息（返回处理失败）
+        /// </summary>
+        /// <param name="result">结果</param>
+        /// <returns></returns>
+        public static Result<T> ReFailure(Result result) 
+        {
+            Result<T> re = new Result<T>();
+            re.To(result);
+            return re;
         }
     }
 }

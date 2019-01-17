@@ -1,12 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace Orleans.Runtime
 {
-   public static class OrleansKeyedServiceCollectionExtensions
+    public static class OrleansKeyedServiceCollectionExtensions
     {
         /// <summary>
         /// Register a scoped keyed service

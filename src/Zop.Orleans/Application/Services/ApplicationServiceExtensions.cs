@@ -18,9 +18,9 @@ namespace Zop.Application.Services
         /// <param name="grainFactory"><see cref="IGrainFactory"/></param>
         /// <param name="primaryKey">Grain primaryKey</param>
         /// <returns></returns>
-        public static IApplicationService<TState> GetStateGrain<TState>(this IGrainFactory grainFactory, long primaryKey) where TState : class, new()
+        public static IApplicationService<TState> GetStateGrain<TState>(this IGrainFactory grainFactory, long primaryKey) where TState : class, IEntity, new()
         {
-            return grainFactory.GetGrain<IApplicationService<TState>>(primaryKey);
+            return grainFactory.GetGrain<IApplicationServiceGrain<TState>>(primaryKey);
         }
         /// <summary>
         /// 获取有状态的Grain
@@ -29,9 +29,9 @@ namespace Zop.Application.Services
         /// <param name="grainFactory"><see cref="IGrainFactory"/></param>
         /// <param name="primaryKey">Grain primaryKey</param>
         /// <returns></returns>
-        public static IApplicationService<TState> GetStateGrain<TState>(this IGrainFactory grainFactory, Guid primaryKey) where TState : class, new()
+        public static IApplicationService<TState> GetStateGrain<TState>(this IGrainFactory grainFactory, Guid primaryKey) where TState : class,IEntity, new()
         {
-            return grainFactory.GetGrain<IApplicationService<TState>>(primaryKey);
+            return grainFactory.GetGrain<IApplicationServiceGrain<TState>>(primaryKey);
         }
         /// <summary>
         /// 获取有状态的Grain
@@ -40,9 +40,9 @@ namespace Zop.Application.Services
         /// <param name="grainFactory"><see cref="IGrainFactory"/></param>
         /// <param name="primaryKey">Grain primaryKey</param>
         /// <returns></returns>
-        public static IApplicationService<TState> GetStateGrain<TState>(this IGrainFactory grainFactory, string primaryKey) where TState : class, new()
+        public static IApplicationService<TState> GetStateGrain<TState>(this IGrainFactory grainFactory, string primaryKey) where TState : class, IEntity, new()
         {
-            return grainFactory.GetGrain<IApplicationService<TState>>(primaryKey);
+            return grainFactory.GetGrain<IApplicationServiceGrain<TState>>(primaryKey);
         }
         /// <summary>
         /// 获取有状态的Grain 默认使用Guid
@@ -50,7 +50,7 @@ namespace Zop.Application.Services
         /// <typeparam name="TState">状态类型</typeparam>
         /// <param name="grainFactory"><see cref="IGrainFactory"/></param>
         /// <returns></returns>
-        public static IApplicationService GetStateGrain<TState>(this IGrainFactory grainFactory) where TState : class, new()
+        public static IApplicationService GetStateGrain<TState>(this IGrainFactory grainFactory) where TState : class, IEntity, new()
         {
             return grainFactory.GetStateGrain<TState>(Guid.NewGuid());
         }

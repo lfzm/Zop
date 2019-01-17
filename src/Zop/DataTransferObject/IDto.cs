@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Zop.DTO
+﻿namespace Zop.DTO
 {
-   public interface IDto
+    public interface IDto
     {
     }
 }

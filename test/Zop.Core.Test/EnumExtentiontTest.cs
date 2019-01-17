@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Xunit;
-using Newtonsoft.Json;
 using System.ComponentModel;
+using Xunit;
 
 namespace Zop.Core.Test
 {

@@ -1,19 +1,4 @@
-﻿#region Copyright (C) 2017 AL系列开源项目
-
-/***************************************************************************
-*　　	文件功能描述：Task扩展类
-*
-*　　	创建人： 阿凌
-*       创建人Email：513845034@qq.com
-*       
-*****************************************************************************/
-
-#endregion
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace System.Threading.Tasks
+﻿namespace System.Threading.Tasks
 {
     /// <summary>
     ///   任务等待扩展

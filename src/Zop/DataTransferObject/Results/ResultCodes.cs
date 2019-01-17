@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Zop
+﻿namespace Zop
 {
     /// <summary>
     /// 结果返回码
@@ -12,50 +8,29 @@ namespace Zop
         /// <summary>
         /// 处理成功
         /// </summary>
-        public const string HandlerSuccess = "success";
+        public const int HandlerSuccess = 200;
         /// <summary>
         /// 参数无效
         /// </summary>
-        public const string InvalidParameter = "invalid_parameter";
+        public const int InvalidParameter = 501;
         /// <summary>
         /// 系统繁忙 
         /// </summary>
-        public const string UnknowError = "unknow_error";
+        public const int UnknowError = 500;
         /// <summary>
         /// 处理错误
         /// </summary>
-        public const string HandlerError = "handler_error";
-        /// <summary>
-        /// 处理错误
-        /// </summary>
-        public const string HandlerFailure = "handler_failure";
+        public const int HandlerError = 502;
         /// <summary>
         /// 未找到服务
         /// </summary>
-        public const string NotFound = "not_found";
+        public const int NotFound = 404;
         /// <summary>
         /// 拒绝请求
         /// </summary>
-        public const string NotAcceptable = "not_acceptable";
-        /// <summary>
-        /// 无效授权令牌
-        /// </summary>
-        public const string InvalidAuthToken = "invalid_auth_token";
-        /// <summary>
-        /// 访问令牌已过期
-        /// </summary>
-        public const string AuthTokenTimeOut = "auth_token_time_out";
-        /// <summary>
-        /// 无效的应用授权令牌
-        /// </summary>
-        public const string InvalidAppAuthToken = "invalid_app_auth_token";
-        /// <summary>
-        /// 应用授权令牌已过期
-        /// </summary>
-        public const string AppAuthTokenTimeOut = "app-auth-token-time-out";
-        /// <summary>
+        public const int NotAcceptable = 403;
         /// 不支持的Context-Type
         /// </summary>
-        public const string UnsupportedMediaType = "unsupported_media_type";
+        public const int UnsupportedMediaType = 415;
     }
 }

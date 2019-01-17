@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Zop.Domain.Entities
+﻿namespace Zop.Domain.Entities
 {
     /// <summary>
     /// 线程安全接口

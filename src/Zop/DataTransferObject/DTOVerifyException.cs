@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Text;
 
 namespace Zop.DTO
 {
     /// <summary>
     /// DTO验证异常
     /// </summary>
-   public class DTOVerifyException : ZopException
+    public class DTOVerifyException : ZopException
     {
-
-
         /// <summary>
         /// Type of the entity.
         /// </summary>

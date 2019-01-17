@@ -1,14 +1,4 @@
-﻿#region Copyright (C) 2017 AL系列开源项目
-
-/*       
-　　	文件功能描述：String类型扩展类
-
-　　	创建人：阿凌
-        创建人Email：513845034@qq.com
-
-*/
-#endregion
-using System.Globalization;
+﻿using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 

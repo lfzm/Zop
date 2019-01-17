@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System;
 using System.ComponentModel.DataAnnotations;
-using System.Reflection;
-using Newtonsoft.Json;
-using System.ComponentModel;
-using System.Linq;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 

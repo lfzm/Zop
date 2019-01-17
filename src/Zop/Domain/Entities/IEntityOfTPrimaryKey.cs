@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Zop.Domain.Entities
+﻿namespace Zop.Domain.Entities
 {
     /// <summary>
     ///定义基本实体类型的接口。 系统中的所有实体都必须实现这个接口。

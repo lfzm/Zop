@@ -1,17 +1,4 @@
-﻿#region Copyright (C) 2017 AL系列开源项目
-
-/***************************************************************************
-*　　	文件功能描述：List类型扩展类
-*
-*　　	创建人： 阿凌
-*       创建人Email：513845034@qq.com
-*       
-*****************************************************************************/
-
-#endregion
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
 namespace System.Collections.Generic
 {

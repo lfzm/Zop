@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.Serialization;
-using System.Text;
 
 namespace Zop.Repositories
 {
-  public class RepositoryException : ZopException
+    public class RepositoryException : ZopException
     {
         /// <summary>
         /// Creates a new <see cref="RepositoryException"/> object.

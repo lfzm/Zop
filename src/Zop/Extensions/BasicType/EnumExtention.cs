@@ -1,20 +1,5 @@
-﻿#region Copyright (C) 2017 AL系列开源项目
-
-/***************************************************************************
-*　　	文件功能描述：枚举扩展方法类
-*
-*　　	创建人： 阿凌
-*       创建人Email：513845034@qq.com
-*       
-*****************************************************************************/
-#endregion
-
-using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.ComponentModel;
 
 namespace System

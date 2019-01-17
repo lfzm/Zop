@@ -1,18 +1,5 @@
-﻿#region Copyright (C) 2017 AL系列开源项目
-
-/*       
-　　	文件功能描述：Json字符串转换扩展类
-
-　　	创建人：阿凌
-        创建人Email：513845034@qq.com
-
-*/
-#endregion
-
-
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using System;
 using System.Collections.Generic;
 
 namespace System

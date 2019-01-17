@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Zop.DTO
+﻿namespace Zop.DTO
 {
     /// <summary>
     /// 输入数据对象

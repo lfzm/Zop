@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using Zop.Extensions.DependencyInjection;
 
 namespace Zop.Extensions.DependencyInjection
 {

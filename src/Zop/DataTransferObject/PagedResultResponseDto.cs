@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Zop.DTO
 {
@@ -9,7 +8,7 @@ namespace Zop.DTO
     /// </summary>
     /// <typeparam name="T"></typeparam>
     [Serializable]
-    public class PagedResultResponseDto<T> : ListResultResponseDto<T>
+    public class PagedResultResponseDto<T> : Result<IReadOnlyList<T>>,IRequestDto
     {
         /// <summary>
         /// Creates a new <see cref="PagedResultResponseDto{T}"/> object.

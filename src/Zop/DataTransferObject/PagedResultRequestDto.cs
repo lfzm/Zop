@@ -1,15 +1,11 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Zop.DTO
 {
     /// <summary>
     /// 分页结果请求对象
     /// </summary>
-  public class PagedResultRequestDto:RequestDto
+    public class PagedResultRequestDto:RequestDto
     {
         /// <summary>
         /// 页码

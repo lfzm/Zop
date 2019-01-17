@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Zop.Domain.Values
+﻿namespace Zop.Domain.Values
 {
     /// <summary>
     /// 值对象接口

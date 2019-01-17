@@ -12,10 +12,10 @@ namespace Zop
     public class Result
     {
         public Result() { }
-        public Result(string message, string status = ResultCodes.HandlerSuccess)
+        public Result(string message, int status = ResultCodes.HandlerSuccess)
         {
-            this.SubCode = status;
-            this.SubMsg = message;
+            this.Status = status;
+            this.Message = message;
         }
         /// <summary>
         /// 执行是否成功
@@ -25,19 +25,19 @@ namespace Zop
         {
             get
             {
-                return this.SubCode == ResultCodes.HandlerSuccess;
+                return this.Status == ResultCodes.HandlerSuccess;
             }
         }
         /// <summary>
         /// 业务返回码
         /// </summary>
-        [JsonProperty(PropertyName = "sub_code")]
-        public string SubCode { get; set; }
+        [JsonProperty(PropertyName = "status")]
+        public int Status { get; set; }
         /// <summary>
         /// 执行返回消息
         /// </summary>
-        [JsonProperty(PropertyName = "sub_msg")]
-        public string SubMsg { get; set; }
+        [JsonProperty(PropertyName = "message")]
+        public string Message { get; set; }
 
         /// <summary>
         /// 转换实体
@@ -45,17 +45,17 @@ namespace Zop
         /// <param name="result"></param>
         protected void To(Result result)
         {
-            this.SubCode = result.SubCode;
-            this.SubMsg = result.SubMsg;
+            this.Status = result.Status;
+            this.Message = result.Message;
         }
         /// <summary>
         /// 转换实体
         /// </summary>
         /// <param name="result"></param>
-        protected void To(string message, string status)
+        protected void To(string message, int status)
         {
-            this.SubCode = status;
-            this.SubMsg = message;
+            this.Status = status;
+            this.Message = message;
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Zop
         /// <param name="message">结果消息</param>
         /// <param name="status">结果状态</param>
         /// <returns></returns>
-        public static Result ReFailure(string message, string status)
+        public static Result ReFailure(string message, int status)
         {
             return new Result(message, status);
         }
@@ -75,7 +75,7 @@ namespace Zop
         /// <returns></returns>
         public static Result ReFailure(string message)
         {
-            return new Result(message, ResultCodes.HandlerFailure);
+            return new Result(message, ResultCodes.HandlerError);
         }
         /// <summary>
         /// 创建返回信息（返回处理失败）
@@ -94,7 +94,7 @@ namespace Zop
         /// <param name="message">结果消息</param>
         /// <param name="status">结果状态</param>
         /// <returns></returns>
-        public static T ReFailure<T>(string message, string status) where T : Result, new()
+        public static T ReFailure<T>(string message, int status) where T : Result, new()
         {
             T result = new T();
             result.To(message, status);
@@ -108,7 +108,7 @@ namespace Zop
         public static T ReFailure<T>(string message) where T : Result, new()
         {
             T result = new T();
-            result.To(message, ResultCodes.HandlerFailure);
+            result.To(message, ResultCodes.HandlerError);
             return result;
         }
 
@@ -118,7 +118,7 @@ namespace Zop
         /// <returns></returns>
         public static Result ReSuccess()
         {
-            return new Result(ResultCodes.HandlerSuccess, ResultCodes.HandlerSuccess);
+            return new Result("success", ResultCodes.HandlerSuccess);
         }
         /// <summary>
         /// 创建成功的返回消息
@@ -127,7 +127,7 @@ namespace Zop
         public static T ReSuccess<T>() where T : Result, new()
         {
             T result = new T();
-            result.To(ResultCodes.HandlerSuccess, ResultCodes.HandlerSuccess);
+            result.To("success", ResultCodes.HandlerSuccess);
             return result;
         }
     }
@@ -145,11 +145,11 @@ namespace Zop
         /// 实体结果
         /// </summary>
         /// <param name="data"></param>
-        public Result(T data) : base(ResultCodes.HandlerSuccess)
+        public Result(T data) : base("success")
         {
             this.Data = data;
         }
-        public Result(T data, string message, string status = ResultCodes.HandlerSuccess) : base(message, status)
+        public Result(T data, string message, int status = ResultCodes.HandlerSuccess) : base(message, status)
         {
             this.Data = data;
         }
@@ -175,7 +175,7 @@ namespace Zop
         /// <param name="message">结果消息</param>
         /// <param name="status">结果状态</param>
         /// <returns></returns>
-        public new static Result<T> ReFailure(string message, string status)
+        public new static Result<T> ReFailure(string message, int status)
         {
             Result<T> result = new Result<T>();
             result.To(message, status);
@@ -189,7 +189,7 @@ namespace Zop
         public new static Result<T> ReFailure(string message)
         {
             Result<T> result = new Result<T>();
-            result.To(message, ResultCodes.HandlerFailure);
+            result.To(message, ResultCodes.HandlerError);
             return result;
         }
         /// <summary>

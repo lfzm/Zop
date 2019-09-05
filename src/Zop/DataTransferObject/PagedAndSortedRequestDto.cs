@@ -6,7 +6,7 @@ namespace Zop.DTO
     /// 分页排序结果请求对象
     /// </summary>
     [Serializable]
-    public class PagedAndSortedResultRequestDto : PagedResultRequestDto
+    public class PagedAndSortedRequestDto : PagedRequestDto
     {
         /// <summary>
         /// Sorting information.

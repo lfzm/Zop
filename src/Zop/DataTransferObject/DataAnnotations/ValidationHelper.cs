@@ -62,7 +62,7 @@ namespace Zop.DTO
             EntityValidationResult result = ValidateEntity<T>(entity);
 
             if (result.HasError && logger != null)
-                logger.Log(logLevel, 0, new FormattedLogValues("{EntityType} Valid Fail Message:{error}", entity.GetType(), result.Errors.ToJsonString()), null, (object state, Exception error) =>
+                logger.Log(logLevel, 0, new FormattedLogValues("{EntityType} Valid Fail Message:{error}", entity.GetType(), result.Errors), null, (object state, Exception error) =>
                 {
                     return state.ToString();
                 });
@@ -79,11 +79,12 @@ namespace Zop.DTO
         {
             EntityValidationResult result = ValidateEntity<T>(entity);
             if (result.HasError)
-                return Result.ReFailure(result.Errors[0].ErrorMessage, ResultCodes.InvalidParameter);
+                return Result.ReFailure(BaseResultCodes.BadRequest.ToFormat(result.Errors[0].ErrorMessage));
             else
                 return Result.ReSuccess();
         }
 
 
     }
+
 }

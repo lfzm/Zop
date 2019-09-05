@@ -2,7 +2,7 @@
 using System;
 using System.Data;
 
-namespace Zop.Repositories.Uow
+namespace Zop.Repositories
 {
     /// <summary>
     /// 工作单元抽象类
@@ -21,7 +21,7 @@ namespace Zop.Repositories.Uow
         /// <summary>
         /// 数据库事务
         /// </summary>
-        public  IDbTransaction Transaction { get; protected set; }
+        public IDbTransaction Transaction { get; protected set; }
 
         /// <summary>
         /// 工作单元是否提交

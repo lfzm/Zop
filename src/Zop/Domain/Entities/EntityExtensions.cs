@@ -23,6 +23,7 @@ namespace Zop.Domain.Entities
         {
             entity.IsDeleted = false;
         }
+
         /// <summary>
         /// 删除实体
         /// </summary>

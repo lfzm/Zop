@@ -1,6 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Zop.Domain.Values
 {
@@ -47,15 +49,19 @@ namespace Zop.Domain.Values
 
             var item = obj as ValueObject<TValueObject>;
             return (object)item != null && Equals((TValueObject)item);
-
         }
-
         public override int GetHashCode()
         {
             return base.GetHashCode(); ;
         }
-
-        public abstract TValueObject Clone();
+        public virtual TValueObject Clone()
+        {
+            MemoryStream stream = new MemoryStream();
+            BinaryFormatter formatter = new BinaryFormatter();
+            formatter.Serialize(stream, this);
+            stream.Position = 0;
+            return (TValueObject)formatter.Deserialize(stream);
+        }
         public static bool operator ==(ValueObject<TValueObject> x, ValueObject<TValueObject> y)
         {
             if (ReferenceEquals(x, y))

@@ -18,9 +18,9 @@ namespace System
         {
             var type = en.GetType();
             var name = en.ToString();
-            var attr = type.GetField(name).GetCustomAttributes(typeof(ALDescriptAttribute), false);
+            var attr = type.GetField(name).GetCustomAttributes(typeof(EnumDescriptAttribute), false);
             if (attr.Length > 0)
-                return ((ALDescriptAttribute)attr[0]).Description;
+                return ((EnumDescriptAttribute)attr[0]).Description;
             else
             {
                 attr = type.GetField(name).GetCustomAttributes(typeof(DescriptionAttribute), false);
@@ -53,9 +53,9 @@ namespace System
                       string resultValue = isIntValue ? ((int)value).ToString() : name;
 
                       string description;
-                      var attr = enType.GetField(name).GetCustomAttributes(typeof(ALDescriptAttribute), false);
+                      var attr = enType.GetField(name).GetCustomAttributes(typeof(EnumDescriptAttribute), false);
                       if (attr.Length > 0)
-                          description = ((ALDescriptAttribute)attr[0]).Description;
+                          description = ((EnumDescriptAttribute)attr[0]).Description;
                       else
                       {
                           attr = enType.GetField(name).GetCustomAttributes(typeof(DescriptionAttribute), false);
@@ -87,13 +87,13 @@ namespace System
     /// 自定义枚举描述属性
     /// </summary>
     [AttributeUsage(AttributeTargets.All, AllowMultiple = true, Inherited = true)]
-    public class ALDescriptAttribute : Attribute
+    public class EnumDescriptAttribute : Attribute
     {
         /// <summary>
         /// 自定义枚举描述构造函数
         /// </summary>
         /// <param name="description"></param>
-        public ALDescriptAttribute(string description)
+        public EnumDescriptAttribute(string description)
         {
             this.Description = description;
         }

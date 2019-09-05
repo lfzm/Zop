@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace Zop.Repositories.Uow
+namespace Zop.Repositories
 {
     /// <summary>
     /// 表示所有集成于该接口的类型都是Unit Of Work的一种实现。

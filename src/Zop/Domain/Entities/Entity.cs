@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -18,9 +17,16 @@ namespace Zop.Domain.Entities
         /// </summary>
         [Key]
         [Required]
-        [JsonProperty]
         public virtual TPrimaryKey Id { get; protected set; }
 
+        public TEntity Clone<TEntity>()
+        {
+            MemoryStream stream = new MemoryStream();
+            BinaryFormatter formatter = new BinaryFormatter();
+            formatter.Serialize(stream, this);
+            stream.Position = 0;
+            return (TEntity)formatter.Deserialize(stream);
+        }
         public override int GetHashCode()
         {
             return base.GetHashCode();
@@ -33,34 +39,6 @@ namespace Zop.Domain.Entities
         {
             this.Id = id;
         }
-        /// <summary>
-        /// 克隆实体
-        /// </summary>
-        /// <typeparam name="TEntity"></typeparam>
-        /// <returns></returns>
-        public TEntity Clone<TEntity>()
-        {
-            MemoryStream stream = new MemoryStream();
-            BinaryFormatter formatter = new BinaryFormatter();
-            formatter.Serialize(stream, this);
-            stream.Position = 0;
-            return (TEntity)formatter.Deserialize(stream);
-        }
-        /// <summary>
-        /// 获取唯一标示
-        /// </summary>
-        /// <returns></returns>
-        public object GetPrimaryKey()
-        {
-            TPrimaryKey defaultValue = default(TPrimaryKey);
-            if (Id == null)
-                return null;
-            if (Id.Equals(defaultValue))
-                return defaultValue;
-            else
-                return Id;
-        }
-       
     }
 
 

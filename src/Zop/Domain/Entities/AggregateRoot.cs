@@ -2,7 +2,6 @@
 
 namespace Zop.Domain.Entities
 {
-
     /// <summary>
     /// 聚合根的抽象实现类
     /// </summary>
@@ -12,6 +11,4 @@ namespace Zop.Domain.Entities
     {
        
     }
-
-
 }

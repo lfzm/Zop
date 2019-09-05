@@ -14,6 +14,4 @@ namespace Zop.Domain.Entities
         /// </summary>
         public int VersionNo { get; set; }
     }
-
-
 }

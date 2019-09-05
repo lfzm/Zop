@@ -10,7 +10,5 @@
         /// 此实体的唯一标识符。
         /// </summary>
         TPrimaryKey Id { get; }
-
-     
     }
 }

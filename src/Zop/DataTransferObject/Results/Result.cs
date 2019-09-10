@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Runtime.Serialization;
+using System.Threading.Tasks;
 
 namespace System
 {
@@ -21,6 +22,7 @@ namespace System
         /// <summary>
         /// 执行是否成功
         /// </summary>
+        [IgnoreDataMember]
         public bool Success
         {
             get
@@ -135,7 +137,7 @@ namespace System
         public static T ReSuccess<T>() where T : Result, new()
         {
             T result = new T();
-            result.To( BaseResultCodes.Success);
+            result.To(BaseResultCodes.Success);
             return result;
         }
 
@@ -148,5 +150,5 @@ namespace System
             return Task.FromResult(this);
         }
     }
-   
+
 }

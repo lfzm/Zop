@@ -2,10 +2,19 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>4.0.0</Version>
-    <Description>Zop Orleans 服务核心库 领域实体 应用服务 仓储</Description>
+    <Version>4.0.2</Version>
+    <Description>Zop 是 .Net Core DDD思想的开发框架</Description>
     <RootNamespace>Zop</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>阿凌</Authors>
+    <PackageProjectUrl>https://github.com/lfzm/Zop</PackageProjectUrl>
+    <PackageIconUrl>https://github.com/lfzm/Zop/logo.png</PackageIconUrl>
+    <RepositoryUrl>https://github.com/lfzm/Zop</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>D:\工作项目\project_Zop\Zop\src\Zop\Zop.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

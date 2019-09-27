@@ -12,7 +12,13 @@ namespace Zop.Test
         public void ResultJsonSerialization()
         {
             var r = Result.ReSuccess();
-           var json = JsonConvert.SerializeObject(r);
+            var json = JsonConvert.SerializeObject(r);
+        }
+        [Fact]
+        public void ResultSuccess()
+        {
+            var res = Result<string>.ReSuccess("test");
+            Assert.Equal(200, res.Code);
         }
     }
 }

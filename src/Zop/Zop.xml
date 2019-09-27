@@ -1,0 +1,1321 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Zop</name>
+    </assembly>
+    <members>
+        <member name="T:Zop.Application.Services.IApplicationService">
+            <summary>
+            这个接口必须由所有的应用服务来实现，以便按照约定标识它们。
+            </summary>
+        </member>
+        <member name="M:Zop.DTO.ValidationHelper.IsValid``1(``0)">
+            <summary>
+            验证是否成功
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Zop.DTO.ValidationHelper.IsValid``1(``0,Microsoft.Extensions.Logging.ILogger,Microsoft.Extensions.Logging.LogLevel)">
+            <summary>
+            验证是否成功
+            </summary>
+            <param name="entity">实体</param>
+            <param name="logger">日志记录</param>
+            <param name="logLevel">日志记录级别</param>
+            <returns></returns>
+        </member>
+        <member name="M:Zop.DTO.ValidationHelper.ValidResult``1(``0)">
+            <summary>
+            验证是否成功
+            </summary>
+            <param name="entity">实体</param>
+            <returns></returns>
+        </member>
+        <member name="T:Zop.DTO.ValidationHelperExtensions">
+            <summary>
+            验证帮助根据扩展类
+            </summary>
+        </member>
+        <member name="M:Zop.DTO.ValidationHelperExtensions.IsIP4(System.String)">
+            <summary>
+            验证IP4格式
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Zop.DTO.ValidationHelperExtensions.IsDomainUrl(System.String)">
+            <summary>
+            验证域名格式
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Zop.DTO.ValidationHelperExtensions.IsUrl(System.String)">
+            <summary>
+            验证URL格式
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Zop.DTO.DTOExtensions">
+            <summary>
+            Dto实体扩展
+            </summary>
+        </member>
+        <member name="M:Zop.DTO.DTOExtensions.IsValid(Zop.DTO.IRequestDto)">
+            <summary>
+            验证是否成功
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Zop.DTO.DTOExtensions.ValidResult(Zop.DTO.IRequestDto)">
+            <summary>
+            验证实体对象
+            </summary>
+            <param name="entity"></param>
+        </member>
+        <member name="M:Zop.DTO.DTOExtensions.IsValid(Zop.DTO.IRequestDto,Microsoft.Extensions.Logging.ILogger,Microsoft.Extensions.Logging.LogLevel)">
+            <summary>
+            验证是否成功
+            </summary>
+            <param name="entity">实体</param>
+            <param name="logger">日志记录</param>
+            <param name="logLevel">日志记录级别</param>
+            <returns></returns>
+        </member>
+        <member name="T:Zop.DTO.IRequestDto">
+            <summary>
+            输入数据对象接口
+            </summary>
+        </member>
+        <member name="T:Zop.DTO.IResponseDto">
+            <summary>
+            输出数据对象接口
+            </summary>
+        </member>
+        <member name="T:Zop.DTO.PagedAndSortedRequestDto">
+            <summary>
+            分页排序结果请求对象
+            </summary>
+        </member>
+        <member name="P:Zop.DTO.PagedAndSortedRequestDto.Sorting">
+            <summary>
+            Sorting information.
+            Should include sorting field and optionally a direction (ASC or DESC)
+            Can contain more than one field separated by comma (,).
+            </summary>
+            <example>
+            Examples:
+            "Name"
+            "Name DESC"
+            "Name ASC, Age DESC"
+            </example>
+        </member>
+        <member name="T:Zop.DTO.PagedRequestDto">
+            <summary>
+            分页结果请求对象
+            </summary>
+        </member>
+        <member name="P:Zop.DTO.PagedRequestDto.PageNo">
+            <summary>
+            页码
+            </summary>
+        </member>
+        <member name="P:Zop.DTO.PagedRequestDto.PageSize">
+            <summary>
+            每页数量
+            </summary>
+        </member>
+        <member name="T:Zop.Domain.Entities.AggregateConcurrencySafe`1">
+            <summary>
+            线程安全实体基类
+            </summary>
+            <typeparam name="TPrimaryKey">主键类型</typeparam>
+        </member>
+        <member name="P:Zop.Domain.Entities.AggregateConcurrencySafe`1.VersionNo">
+            <summary>
+            乐观锁 版本号
+            </summary>
+        </member>
+        <member name="T:Zop.Domain.Entities.AggregateRoot`1">
+            <summary>
+            聚合根的抽象实现类
+            </summary>
+            <typeparam name="TPrimaryKey"></typeparam>
+        </member>
+        <member name="T:Zop.Domain.Entities.Entity`1">
+            <summary>
+            IEntity接口的基本实现  一个实体可以继承这个类直接实现到IEntity接口。
+            </summary>
+            <typeparam name="TPrimaryKey">Type of the primary key of the entity</typeparam>
+        </member>
+        <member name="P:Zop.Domain.Entities.Entity`1.Id">
+            <summary>
+            此实体的唯一标识符
+            </summary>
+        </member>
+        <member name="M:Zop.Domain.Entities.Entity`1.SetId(`0)">
+            <summary>
+            设置唯一标识符
+            </summary>
+            <param name="id">唯一标识符</param>
+        </member>
+        <member name="T:Zop.Domain.Entities.EntityConcurrencySafe`1">
+            <summary>
+            线程安全实体基类
+            </summary>
+            <typeparam name="TPrimaryKey">主键类型</typeparam>
+        </member>
+        <member name="P:Zop.Domain.Entities.EntityConcurrencySafe`1.VersionNo">
+            <summary>
+            乐观锁 版本号
+            </summary>
+        </member>
+        <member name="T:Zop.Domain.Entities.EntityExtensions">
+            <summary>
+            Some useful extension methods for Entities.
+            </summary>
+        </member>
+        <member name="M:Zop.Domain.Entities.EntityExtensions.IsNullOrDeleted(Zop.Domain.Entities.ISoftDelete)">
+            <summary>
+            检查这个实体是否被标记为已删除
+            </summary>
+        </member>
+        <member name="M:Zop.Domain.Entities.EntityExtensions.UnDelete(Zop.Domain.Entities.ISoftDelete)">
+             <summary>
+            取消删除实体
+             </summary>
+        </member>
+        <member name="M:Zop.Domain.Entities.EntityExtensions.Delete(Zop.Domain.Entities.ISoftDelete)">
+            <summary>
+            删除实体
+            </summary>
+            <param name="entity"></param>
+        </member>
+        <member name="M:Zop.Domain.Entities.EntityExtensions.OldVersionNo(Zop.Domain.Entities.IConcurrencySafe)">
+             <summary>
+            获取原来的乐观版本号
+             </summary>
+        </member>
+        <member name="M:Zop.Domain.Entities.EntityExtensions.IsValid``1(Zop.Domain.Entities.IEntity{``0})">
+            <summary>
+            验证是否成功
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Zop.Domain.Entities.EntityExtensions.IsValid``1(Zop.Domain.Entities.IEntity{``0},Microsoft.Extensions.Logging.ILogger,Microsoft.Extensions.Logging.LogLevel)">
+            <summary>
+            验证是否成功
+            </summary>
+            <param name="entity">实体</param>
+            <param name="logger">日志记录</param>
+            <param name="logLevel">日志记录级别</param>
+            <returns></returns>
+        </member>
+        <member name="T:Zop.Domain.Entities.IAggregateRoot`1">
+            <summary>
+            聚合根接口
+            </summary>
+            <typeparam name="TPrimaryKey">聚合根的唯一标示类型</typeparam>
+        </member>
+        <member name="T:Zop.Domain.Entities.IConcurrencySafe">
+            <summary>
+            线程安全接口
+            </summary>
+        </member>
+        <member name="P:Zop.Domain.Entities.IConcurrencySafe.VersionNo">
+            <summary>
+            乐观并发的版本号
+            </summary>
+        </member>
+        <member name="T:Zop.Domain.Entities.IEntity">
+            <summary>
+            标示领域实体基类
+            </summary>
+        </member>
+        <member name="M:Zop.Domain.Entities.IEntity.Clone``1">
+            <summary>
+            深度复制
+            </summary>
+            <typeparam name="TEntity">赋值类型</typeparam>
+            <returns></returns>
+        </member>
+        <member name="T:Zop.Domain.Entities.IEntity`1">
+             <summary>
+            定义基本实体类型的接口。 系统中的所有实体都必须实现这个接口。
+             </summary>
+             <typeparam name="TPrimaryKey">实体主键的类型</typeparam>
+        </member>
+        <member name="P:Zop.Domain.Entities.IEntity`1.Id">
+            <summary>
+            此实体的唯一标识符。
+            </summary>
+        </member>
+        <member name="T:Zop.Domain.Entities.ISoftDelete">
+            <summary>
+            软商城
+            </summary>
+        </member>
+        <member name="P:Zop.Domain.Entities.ISoftDelete.IsDeleted">
+            <summary>
+            实体是否删除
+            </summary>
+        </member>
+        <member name="T:Zop.Domain.Events.IEventData">
+            <summary>
+            事件数据
+            </summary>
+        </member>
+        <member name="P:Zop.Domain.Events.IEventData.EventTime">
+            <summary>
+            事件发生的时间
+            </summary>
+        </member>
+        <member name="P:Zop.Domain.Events.IEventData.EventName">
+            <summary>
+            事件名称
+            </summary>
+        </member>
+        <member name="T:Zop.Domain.Services.DomainService">
+            <summary>
+            领域服务的基类
+            </summary>
+        </member>
+        <member name="T:Zop.Domain.Values.IValueObject">
+            <summary>
+            值对象接口
+            </summary>
+        </member>
+        <member name="T:Zop.Domain.Values.ValueObject`1">
+             <summary>
+            值对象基础类
+             </summary>
+             <typeparam name="TValueObject">值对象的类型</typeparam>
+        </member>
+        <member name="M:Zop.Domain.Values.ValueObject`1.Equals(`0)">
+            <summary>
+            是否相等
+            </summary>
+            <param name="other"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Zop.Domain.Values.ValueObject`1.Equals(System.Object)">
+            <summary>
+            是否相等
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Zop.Extensions.DependencyInjection.IKeyedServiceCollection`2">
+            <summary>
+            Collection of services that can be disambiguated by key
+            </summary>
+        </member>
+        <member name="M:Zop.Extensions.DependencyInjection.KeyedServiceCollectionExtensions.AddTransientKeyedService``2(Microsoft.Extensions.DependencyInjection.IServiceCollection,``0,System.Func{System.IServiceProvider,``0,``1})">
+            <summary>
+            Register a transient keyed service
+            </summary>
+        </member>
+        <member name="M:Zop.Extensions.DependencyInjection.KeyedServiceCollectionExtensions.AddTransientKeyedService``3(Microsoft.Extensions.DependencyInjection.IServiceCollection,``0)">
+            <summary>
+            Register a transient keyed service
+            </summary>
+        </member>
+        <member name="M:Zop.Extensions.DependencyInjection.KeyedServiceCollectionExtensions.AddSingletonKeyedService``2(Microsoft.Extensions.DependencyInjection.IServiceCollection,``0,System.Func{System.IServiceProvider,``0,``1})">
+            <summary>
+            Register a singleton keyed service
+            </summary>
+        </member>
+        <member name="M:Zop.Extensions.DependencyInjection.KeyedServiceCollectionExtensions.AddSingletonKeyedService``3(Microsoft.Extensions.DependencyInjection.IServiceCollection,``0)">
+            <summary>
+            Register a singleton keyed service
+            </summary>
+        </member>
+        <member name="M:Zop.Extensions.DependencyInjection.KeyedServiceCollectionExtensions.AddScopedKeyedService``2(Microsoft.Extensions.DependencyInjection.IServiceCollection,``0,System.Func{System.IServiceProvider,``0,``1})">
+            <summary>
+            Register a scoped keyed service
+            </summary>
+        </member>
+        <member name="M:Zop.Extensions.DependencyInjection.KeyedServiceCollectionExtensions.AddScopedKeyedService``3(Microsoft.Extensions.DependencyInjection.IServiceCollection,``0)">
+            <summary>
+            Register a scoped keyed service
+            </summary>
+        </member>
+        <member name="M:Zop.Extensions.DependencyInjection.KeyedServiceCollectionExtensions.AddTransientNamedService``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.String,System.Func{System.IServiceProvider,System.String,``0})">
+            <summary>
+            Register a transient named service
+            </summary>
+        </member>
+        <member name="M:Zop.Extensions.DependencyInjection.KeyedServiceCollectionExtensions.AddTransientNamedService``2(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.String)">
+            <summary>
+            Register a transient named service
+            </summary>
+        </member>
+        <member name="M:Zop.Extensions.DependencyInjection.KeyedServiceCollectionExtensions.AddSingletonNamedService``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.String,System.Func{System.IServiceProvider,System.String,``0})">
+            <summary>
+            Register a singleton named service
+            </summary>
+        </member>
+        <member name="M:Zop.Extensions.DependencyInjection.KeyedServiceCollectionExtensions.AddSingletonNamedService``2(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.String)">
+            <summary>
+            Register a singleton named service
+            </summary>
+        </member>
+        <member name="M:Zop.Extensions.DependencyInjection.KeyedServiceCollectionExtensions.AddScopedNamedService``1(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.String,System.Func{System.IServiceProvider,System.String,``0})">
+            <summary>
+            Register a scoped named service
+            </summary>
+        </member>
+        <member name="M:Zop.Extensions.DependencyInjection.KeyedServiceCollectionExtensions.AddScopedNamedService``2(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.String)">
+            <summary>
+            Register a scoped named service
+            </summary>
+        </member>
+        <member name="M:Zop.Extensions.DependencyInjection.KeyedServiceProviderExtensions.GetServiceByKey``2(System.IServiceProvider,``0)">
+            <summary>
+            Acquire a service by key.
+            </summary>
+        </member>
+        <member name="M:Zop.Extensions.DependencyInjection.KeyedServiceProviderExtensions.GetRequiredServiceByKey``2(System.IServiceProvider,``0)">
+            <summary>
+            Acquire a service by key.  Throws KeyNotFound exception if key is not found.
+            </summary>
+        </member>
+        <member name="M:Zop.Extensions.DependencyInjection.KeyedServiceProviderExtensions.GetServiceByName``1(System.IServiceProvider,System.String)">
+            <summary>
+            Acquire a service by name.
+            </summary>
+        </member>
+        <member name="M:Zop.Extensions.DependencyInjection.KeyedServiceProviderExtensions.GetRequiredServiceByName``1(System.IServiceProvider,System.String)">
+            <summary>
+            Acquire a service by name.  Throws KeyNotFound exception if name is not found.
+            </summary>
+        </member>
+        <member name="T:Zop.Repositories.IRepository">
+            <summary>
+            仓储接口
+            </summary>
+        </member>
+        <member name="T:Zop.Repositories.IRepository`2">
+            <summary>
+            仓储接口
+            </summary>
+        </member>
+        <member name="M:Zop.Repositories.IRepository`2.GetAsync(`1)">
+            <summary>
+            获取实体
+            </summary>
+            <param name="id">标识ID</param>
+            <returns></returns>
+        </member>
+        <member name="M:Zop.Repositories.IRepository`2.AddAsync(`0)">
+            <summary>
+            添加实体
+            </summary>
+            <param name="entity">实体</param>
+            <returns></returns>
+        </member>
+        <member name="M:Zop.Repositories.IRepository`2.RemoveAsync(`1)">
+            <summary>
+            删除实体
+            </summary>
+            <param name="primaryKey">实体唯一标识</param>
+            <returns></returns>
+        </member>
+        <member name="T:Zop.Repositories.IUnitOfWork">
+            <summary>
+            表示所有集成于该接口的类型都是Unit Of Work的一种实现。
+            </summary>
+        </member>
+        <member name="M:Zop.Repositories.IUnitOfWork.Begin">
+            <summary>
+            开始Unit Of Work事务
+            </summary>
+        </member>
+        <member name="P:Zop.Repositories.IUnitOfWork.Committed">
+            <summary>
+            获得一个<see cref="T:System.Boolean"/>值，该值表述了当前的Unit Of Work事务是否已被提交。
+            </summary>
+        </member>
+        <member name="M:Zop.Repositories.IUnitOfWork.Commit(System.Boolean)">
+            <summary>
+            提交当前的Unit Of Work事务。
+            </summary>
+        </member>
+        <member name="M:Zop.Repositories.IUnitOfWork.Rollback">
+            <summary>
+            回滚当前的 Unit Of Work事务。
+            </summary>
+        </member>
+        <member name="T:System.ComponentModel.DataAnnotations.CollectionCountAttribute">
+            <summary>
+            Collection数量限制
+            </summary>
+        </member>
+        <member name="M:System.ComponentModel.DataAnnotations.CollectionCountAttribute.#ctor(System.Int32,System.Int32)">
+            <summary>
+            List最大数量限制
+            </summary>
+            <param name="minCount">最小数量</param>
+            <param name="maxCount">最大数量</param>
+        </member>
+        <member name="P:System.ComponentModel.DataAnnotations.CollectionCountAttribute.MaxCount">
+            <summary>
+            最大数量
+            </summary>
+        </member>
+        <member name="P:System.ComponentModel.DataAnnotations.CollectionCountAttribute.MinCount">
+            <summary>
+            最小数了
+            </summary>
+        </member>
+        <member name="T:System.ComponentModel.DataAnnotations.IP4Attribute">
+            <summary>
+            IP4
+            </summary>
+        </member>
+        <member name="F:System.ComponentModel.DataAnnotations.IP4Attribute._ipregex">
+            <summary>
+            Ip 正则表达式
+            </summary>
+        </member>
+        <member name="M:System.ComponentModel.DataAnnotations.IP4Attribute.Verify(System.String)">
+            <summary>
+            验证Ip4格式
+            </summary>
+            <param name="ip4"></param>
+            <returns></returns>
+        </member>
+        <member name="T:System.Result">
+            <summary>
+            结果对象
+            </summary>
+        </member>
+        <member name="P:System.Result.Success">
+            <summary>
+            执行是否成功
+            </summary>
+        </member>
+        <member name="P:System.Result.Code">
+            <summary>
+            业务返回码
+            </summary>
+        </member>
+        <member name="P:System.Result.Msg">
+            <summary>
+            执行返回消息
+            </summary>
+        </member>
+        <member name="M:System.Result.To(System.Result)">
+            <summary>
+            转换实体
+            </summary>
+            <param name="result"></param>
+        </member>
+        <member name="M:System.Result.To(System.String,System.Int32)">
+            <summary>
+            转换实体
+            </summary>
+            <param name="message">结果消息</param>
+            <param name="code">结果代码</param>
+        </member>
+        <member name="M:System.Result.To(System.ValueTuple{System.Int32,System.String})">
+            <summary>
+            转换实体
+            </summary>
+            <param name="result">结果对象</param>
+        </member>
+        <member name="M:System.Result.ReFailure(System.String,System.Int32)">
+            <summary>
+            创建返回信息（返回处理失败）
+            </summary>
+            <param name="message">结果消息</param>
+            <param name="code">结果状态</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Result.ReFailure(System.ValueTuple{System.Int32,System.String})">
+            <summary>
+            创建返回信息（返回处理失败）
+            </summary>
+            <param name="result">结果消息</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Result.ReFailure``1(System.Result)">
+            <summary>
+            创建返回信息（返回处理失败）
+            </summary>
+            <param name="result">结果</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Result.ReFailure``1(System.String,System.Int32)">
+            <summary>
+            创建返回信息（返回处理失败）
+            </summary>
+            <param name="message">结果消息</param>
+            <param name="code">结果状态</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Result.ReFailure``1(System.ValueTuple{System.Int32,System.String})">
+            <summary>
+            创建返回信息（返回处理失败）
+            </summary>
+            <param name="result">结果消息</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Result.ReSuccess">
+            <summary>
+            创建成功的返回消息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:System.Result.ReSuccess``1">
+            <summary>
+            创建成功的返回消息
+            </summary>
+            <returns></returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:System.Result.AsTask" -->
+        <member name="T:System.Result`1">
+            <summary>
+            实体结果
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:System.Result`1.#ctor">
+            <summary>
+            实体结果
+            </summary>
+        </member>
+        <member name="M:System.Result`1.#ctor(`0)">
+            <summary>
+            实体结果
+            </summary>
+            <param name="data"></param>
+        </member>
+        <member name="P:System.Result`1.Data">
+            <summary>
+            返回对象
+            </summary>
+        </member>
+        <member name="M:System.Result`1.ReSuccess(`0)">
+            <summary>
+            创建成功的返回消息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:System.Result`1.ReFailure(System.String,System.Int32)">
+            <summary>
+            创建返回信息（返回处理失败）
+            </summary>
+            <param name="message">结果消息</param>
+            <param name="code">结果状态</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Result`1.ReFailure(System.ValueTuple{System.Int32,System.String})">
+            <summary>
+            创建返回信息（返回处理失败）
+            </summary>
+            <param name="result">结果消息</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Result`1.ReFailure(System.Result)">
+            <summary>
+            创建返回信息（返回处理失败）
+            </summary>
+            <param name="result">结果</param>
+            <returns></returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:System.Result`1.AsTask" -->
+        <member name="T:System.BaseResultCodes">
+            <summary>
+            结果返回码
+            </summary>
+        </member>
+        <member name="F:System.BaseResultCodes.Success">
+            <summary>
+            处理成功
+            </summary>
+        </member>
+        <member name="F:System.BaseResultCodes.BadRequest">
+            <summary>
+            错误请求
+            </summary>
+        </member>
+        <member name="F:System.BaseResultCodes.UnAuthorized">
+            <summary>
+            未授权
+            </summary>
+        </member>
+        <member name="F:System.BaseResultCodes.NotAcceptable">
+            <summary>
+            拒绝请求
+            </summary>
+        </member>
+        <member name="F:System.BaseResultCodes.NotFound">
+            <summary>
+            未找到服务
+            </summary>
+        </member>
+        <member name="F:System.BaseResultCodes.UnknowError">
+            <summary>
+            系统错误
+            </summary>
+        </member>
+        <member name="F:System.BaseResultCodes.RequestTimeout">
+            <summary>
+            请求超时
+            </summary>
+        </member>
+        <member name="M:System.BaseResultCodesExtension.ToFormat(System.ValueTuple{System.Int32,System.String},System.String[])">
+            <summary>
+            根据替换符进行替换支付
+            </summary>
+            <param name="result">结果对象</param>
+            <param name="args">替换字符</param>
+            <returns></returns>
+        </member>
+        <member name="T:System.ResultList`1">
+            <summary>
+            集合结果类
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:System.ResultList`1.#ctor">
+            <summary>
+            实体集合结果
+            </summary>
+        </member>
+        <member name="M:System.ResultList`1.#ctor(System.Collections.Generic.IList{`0})">
+            <summary>
+            实体集合结果
+            </summary>
+            <param name="data">实体集合</param>
+        </member>
+        <member name="M:System.ResultList`1.#ctor(System.Collections.Generic.IList{`0},System.ValueTuple{System.Int32,System.String})">
+            <summary>
+            实体集合结果
+            </summary>
+            <param name="data">实体集合</param>
+            <param name="result">结果状态</param>
+        </member>
+        <member name="M:System.ResultList`1.ReSuccess(System.Collections.Generic.IList{`0})">
+            <summary>
+            创建成功的返回消息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:System.ResultList`1.ReSuccess">
+            <summary>
+            创建成功的返回消息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:System.ResultList`1.ReFailure(System.String,System.Int32)">
+            <summary>
+            创建返回信息（返回处理失败）
+            </summary>
+            <param name="message">结果消息</param>
+            <param name="status">结果状态</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.ResultList`1.ReFailure(System.ValueTuple{System.Int32,System.String})">
+            <summary>
+            创建返回信息（返回处理失败）
+            </summary>
+            <param name="result">结果消息</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.ResultList`1.ReFailure(System.Result)">
+            <summary>
+            创建返回信息（返回处理失败）
+            </summary>
+            <param name="result">结果</param>
+            <returns></returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:System.ResultList`1.AsTask" -->
+        <member name="T:System.ResultPagedList`1">
+            <summary>
+            分页列表结果对象
+            </summary>
+        </member>
+        <member name="M:System.ResultPagedList`1.#ctor(System.Int32,System.Int32)">
+            <summary>
+            实体分页集合结果
+            </summary>
+            <param name="pageNo">页码</param>
+            <param name="pageSize">每页数量</param>
+        </member>
+        <member name="M:System.ResultPagedList`1.#ctor(Zop.DTO.PagedRequestDto)">
+            <summary>
+            实体分页集合结果
+            </summary>
+            <param name="requestDto"><see cref="T:Zop.DTO.PagedRequestDto"/>分页请求对象</param>
+        </member>
+        <member name="M:System.ResultPagedList`1.#ctor(System.Collections.Generic.IList{`0},System.Int32)">
+            <summary>
+            实体分页集合结果
+            </summary>
+            <param name="data">实体集合</param>
+            <param name="totalCount">总条数</param>
+        </member>
+        <member name="M:System.ResultPagedList`1.#ctor(System.Collections.Generic.IList{`0},System.Int32,System.ValueTuple{System.Int32,System.String})">
+            <summary>
+            实体分页集合结果
+            </summary>
+            <param name="data">实体集合</param>
+            <param name="result">结果状态</param>
+        </member>
+        <member name="P:System.ResultPagedList`1.TotalCount">
+            <summary>
+            Total count of Items.
+            </summary>
+        </member>
+        <member name="P:System.ResultPagedList`1.PageNo">
+            <summary>
+            页码
+            </summary>
+        </member>
+        <member name="P:System.ResultPagedList`1.PageSize">
+            <summary>
+            每页数量
+            </summary>
+        </member>
+        <member name="M:System.ResultPagedList`1.ReSuccess(System.Collections.Generic.IList{`0},System.Int32)">
+            <summary>
+            创建成功的返回消息
+            </summary>
+            <param name="data">实体集合</param>
+            <param name="totalCount">总条数</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.ResultPagedList`1.ReSuccess">
+            <summary>
+            创建成功的返回消息
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:System.ResultPagedList`1.ReFailure(System.String,System.Int32)">
+            <summary>
+            创建返回信息（返回处理失败）
+            </summary>
+            <param name="message">结果消息</param>
+            <param name="status">结果状态</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.ResultPagedList`1.ReFailure(System.ValueTuple{System.Int32,System.String})">
+            <summary>
+            创建返回信息（返回处理失败）
+            </summary>
+            <param name="result">结果消息</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.ResultPagedList`1.ReFailure(System.Result)">
+            <summary>
+            创建返回信息（返回处理失败）
+            </summary>
+            <param name="result">结果</param>
+            <returns></returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:System.ResultPagedList`1.AsTask" -->
+        <member name="T:System.DateTimeExtention">
+            <summary>
+            时间秒数转化
+            </summary>
+        </member>
+        <member name="M:System.DateTimeExtention.ToUtcSeconds(System.DateTime)">
+            <summary>
+            获取距离 1970-01-01（格林威治时间）的秒数
+            </summary>
+            <param name="localTime"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.DateTimeExtention.FromUtcSeconds(System.Int64)">
+            <summary>
+            距离 1970-01-01（格林威治时间）的秒数转换为当前时间
+            </summary>
+            <param name="seconds"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.DateTimeExtention.ToUtcMilliSeconds(System.DateTime)">
+            <summary>
+            获取距离 1970-01-01（格林威治时间）的秒数
+            </summary>
+            <param name="localTime"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.DateTimeExtention.FromUtcMilliSeconds(System.Int64)">
+            <summary>
+            距离 1970-01-01（格林威治时间）的秒数转换为当前时间
+            </summary>
+            <param name="seconds"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.DateTimeExtention.ToLocalSeconds(System.DateTime)">
+            <summary>
+            获取距离 1970-01-01（本地/北京时间）的秒数
+            </summary>
+            <param name="localTime"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.DateTimeExtention.FromLocalSeconds(System.Int64)">
+            <summary>
+            距离 1970-01-01（本地/北京时间）的秒数转换为当前时间
+            </summary>
+            <param name="seconds"></param>
+            <returns></returns>
+        </member>
+        <member name="T:System.Collections.Generic.DictionaryExtention">
+            <summary>
+            Dictionary类型扩展表
+            </summary>
+        </member>
+        <member name="M:System.Collections.Generic.DictionaryExtention.Copy(System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+             拷贝字典
+            </summary>
+            <param name="source"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Collections.Generic.DictionaryExtention.GetValue``1(System.Collections.Generic.IDictionary{System.String,``0},System.String)">
+            <summary>
+            获取字典的值
+            </summary>
+            <typeparam name="T">取值类型</typeparam>
+            <param name="dirs">键值集合</param>
+            <param name="key">Key</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Collections.Generic.DictionaryExtention.ObjectConvertDictionary``1(``0)">
+            <summary>
+            对象转换为字典 （反射）
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="T:System.Collections.Generic.ListExtention">
+            <summary>
+            List 扩展类
+            </summary>
+        </member>
+        <member name="M:System.Collections.Generic.ListExtention.IsNullOrAuy``1(System.Collections.Generic.IList{``0})">
+            <summary>
+            是否可用
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="target"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Collections.Generic.ListExtention.Merged``1(System.Collections.Generic.IList{``0},System.Collections.Generic.IList{``0},System.Func{System.Collections.Generic.IList{``0},``0,System.Boolean})">
+            <summary>
+            List合并
+            </summary>
+            <typeparam name="T">数据类型</typeparam>
+            <param name="target">目标对象</param>
+            <param name="source">来源对象</param>
+            <param name="func">重复项依据方法 true-没有重复项，可以合并，fale-有重复项，不能合并</param>
+            <returns>返回合并后的目标对象 - 排除重复项</returns>
+        </member>
+        <member name="M:System.Collections.Generic.ListExtention.ConvertAll``2(System.Collections.Generic.List{``0},System.Func{``0,``1})">
+            <summary>
+            List转化扩展方法
+            </summary>
+            <typeparam name="TPara"></typeparam>
+            <typeparam name="TResult"></typeparam>
+            <param name="list"></param>
+            <param name="func"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Collections.Generic.ListExtention.Copy``1(System.Collections.Generic.List{``0})">
+            <summary>
+            List拷贝
+            </summary>
+            <param name="source"></param>
+            <returns></returns>
+        </member>
+        <member name="T:System.EnumExtention">
+            <summary>
+            枚举扩展方法类
+            </summary>
+        </member>
+        <member name="M:System.EnumExtention.GetDescription(System.Enum)">
+            <summary>
+            获取描述
+            </summary>
+            <param name="en">枚举对象</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.EnumExtention.GetDescriptionList(System.Enum,System.Boolean)">
+            <summary>
+            获取枚举字典列表
+            </summary>
+            <param name="en">枚举类型</param>
+            <param name="isIntValue">返回枚举值是否是int类型</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.EnumExtention.Parse``1(System.Enum)">
+            <summary>
+            枚举直接转换
+            </summary>
+            <typeparam name="TEnum"></typeparam>
+            <param name="en"></param>
+            <returns></returns>
+        </member>
+        <member name="T:System.EnumDescriptAttribute">
+            <summary>
+            自定义枚举描述属性
+            </summary>
+        </member>
+        <member name="M:System.EnumDescriptAttribute.#ctor(System.String)">
+            <summary>
+            自定义枚举描述构造函数
+            </summary>
+            <param name="description"></param>
+        </member>
+        <member name="P:System.EnumDescriptAttribute.Description">
+            <summary>
+              描述信息
+            </summary>
+        </member>
+        <member name="T:System.Security.Cryptography.HashExtensions">
+            <summary>
+            Extension methods for hashing strings
+            </summary>
+        </member>
+        <member name="M:System.Security.Cryptography.HashExtensions.Sha256(System.String)">
+            <summary>
+            Creates a SHA256 hash of the specified input.
+            </summary>
+            <param name="input">The input.</param>
+            <returns>A hash</returns>
+        </member>
+        <member name="M:System.Security.Cryptography.HashExtensions.Sha256(System.Byte[])">
+            <summary>
+            Creates a SHA256 hash of the specified input.
+            </summary>
+            <param name="input">The input.</param>
+            <returns>A hash.</returns>
+        </member>
+        <member name="M:System.Security.Cryptography.HashExtensions.Sha512(System.String)">
+            <summary>
+            Creates a SHA512 hash of the specified input.
+            </summary>
+            <param name="input">The input.</param>
+            <returns>A hash</returns>
+        </member>
+        <member name="T:System.Linq.ListToStringStorageExtensions">
+            <summary>
+            List转换为String类型进行存储扩展
+            </summary>
+        </member>
+        <member name="M:System.Linq.ListToStringStorageExtensions.GetList(System.String,System.Char)">
+            <summary>
+            转换List
+            </summary>
+            <param name="source">源字符串</param>
+            <param name="splitStr">拆分间隔字符</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Linq.ListToStringStorageExtensions.SetValue(System.String,System.String,System.Char)">
+            <summary>
+            设置值
+            </summary>
+            <param name="source">源字符串</param>
+            <param name="value">值</param>
+            <param name="splitStr">拆分间隔字符</param>
+        </member>
+        <member name="M:System.Linq.ListToStringStorageExtensions.SetValue(System.String,System.Collections.Generic.List{System.String},System.Char)">
+            <summary>
+            设置值 (会清除之前存储的值)
+            </summary>
+            <param name="source">源字符串</param>
+            <param name="values">值</param>
+            <param name="splitStr">拆分间隔字符</param>
+        </member>
+        <member name="M:System.Linq.ListToStringStorageExtensions.Cover(System.String,System.Collections.Generic.List{System.String},System.Char)">
+            <summary>
+            覆盖之前的值
+            </summary>
+            <param name="source">源字符串</param>
+            <param name="values">值</param>
+            <param name="splitStr">拆分间隔字符</param>
+        </member>
+        <member name="M:System.Linq.ListToStringStorageExtensions.RemoveValue(System.String,System.String,System.Char)">
+            <summary>
+            移除值
+            </summary>
+            <param name="source">源字符串</param>
+            <param name="value">值</param>
+            <param name="splitStr">拆分间隔字符</param>
+        </member>
+        <member name="M:System.Linq.ListToStringStorageExtensions.RemoveValue(System.String,System.Collections.Generic.List{System.String},System.Char)">
+            <summary>
+            移除值
+            </summary>
+            <param name="source">源字符串</param>
+            <param name="values">值</param>
+            <param name="splitStr">拆分间隔字符</param>
+        </member>
+        <member name="M:System.Linq.ListToStringStorageExtensions.Clear(System.String)">
+            <summary>
+            清除所有的值
+            </summary>
+            <param name="source">源字符串</param>
+        </member>
+        <member name="T:System.StringExtention">
+            <summary>
+            String类型扩展类
+            </summary>
+        </member>
+        <member name="M:System.StringExtention.GetStringLength(System.String)">
+            <summary>
+            获取字符长度
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.StringExtention.SplitString(System.String,System.String)">
+            <summary>
+            字符串拆分
+            </summary>
+            <param name="sourceStr">源字符串</param>
+            <param name="splitStr">拆分间隔字符</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.StringExtention.SplitString(System.String)">
+            <summary>
+            字符串拆分
+            </summary>
+            <param name="sourceStr">源字符串</param>
+        </member>
+        <member name="M:System.StringExtention.SubString(System.String,System.Int32,System.Int32)">
+            <summary>
+            截取字符串
+            </summary>
+            <param name="sourceStr">源字符串</param>
+            <param name="startIndex">开始位置</param>
+            <param name="length">截取长度</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.StringExtention.SubString(System.String,System.Int32)">
+            <summary> 
+            截取字符串 默认0开始
+            </summary>
+            <param name="sourceStr">源字符串</param>
+            <param name="length">截取长度</param>
+        </member>
+        <member name="M:System.StringExtention.SubStringEnd(System.String,System.Int32)">
+            <summary> 
+            从尾部截取字符串
+            </summary>
+            <param name="sourceStr">源字符串</param>
+            <param name="length">截取长度</param>
+        </member>
+        <member name="M:System.StringExtention.TrimStart(System.String,System.String)">
+            <summary>
+            删除头部字符串
+            </summary>
+            <param name="sourceStr">源字符串</param>
+            <param name="trimStr">删除的字符</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.StringExtention.TrimStart(System.String,System.String,System.Boolean)">
+            <summary>
+            删除头部字符串
+            </summary>
+            <param name="sourceStr">源字符串</param>
+            <param name="trimStr">删除的字符</param>
+            <param name="ignoreCase">是否忽略大小写</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.StringExtention.TrimEnd(System.String,System.String)">
+            <summary>
+            删除尾部字符串
+            </summary>
+            <param name="sourceStr">源字符串</param>
+            <param name="trimStr">删除的字符</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.StringExtention.TrimEnd(System.String,System.String,System.Boolean)">
+            <summary>
+            删除尾部字符串
+            </summary>
+            <param name="sourceStr">源字符串</param>
+            <param name="trimStr">删除的字符</param>
+            <param name="ignoreCase">是否忽略大小写</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.StringExtention.Trim(System.String,System.String)">
+            <summary>
+            删除字符串
+            </summary>
+            <param name="sourceStr">源字符串</param>
+            <param name="trimStr">删除的字符</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.StringExtention.Trim(System.String,System.String,System.Boolean)">
+            <summary>
+            删除字符串
+            </summary>
+            <param name="sourceStr">源字符串</param>
+            <param name="trimStr">删除的字符</param>
+            <param name="ignoreCase">是否忽略大小写</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.StringExtention.Replace(System.String,System.String,System.Int32,System.Int32)">
+            <summary>
+            字符串替换
+            </summary>
+            <param name="sourceStr">源字符串</param>
+            <param name="newStr">新字符串</param>
+            <param name="startIndex">开始位置</param>
+            <param name="length">截取长度</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.StringExtention.ToUInt32(System.String,System.UInt32)">
+            <summary>
+            字符串转化成 UInt32
+            </summary>
+            <param name="obj">要转化的值</param>
+            <param name="defaultValue">如果转化失败，返回的默认值</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.StringExtention.ToInt32(System.String,System.Int32)">
+            <summary>
+            字符串转化成 Int32
+            </summary>
+            <param name="obj">要转化的值</param>
+            <param name="defaultValue">如果转化失败，返回的默认值</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.StringExtention.ToInt64(System.String,System.Int32)">
+            <summary>
+            字符串转化成 long
+            </summary>
+            <param name="obj">要转化的值</param>
+            <param name="defaultValue">如果转化失败，返回的默认值</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.StringExtention.ToDecimal(System.String,System.Decimal)">
+            <summary>
+            字符串转化成 Decimal
+            </summary>
+            <param name="obj">要转化的值</param>
+            <param name="defaultValue">如果转化失败，返回的默认值</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.StringExtention.ToDouble(System.String,System.Double)">
+            <summary>
+            字符串转化成 Double
+            </summary>
+            <param name="obj">要转化的值</param>
+            <param name="defaultValue">如果转化失败，返回的默认值</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.StringExtention.ToFloat(System.String,System.Single)">
+            <summary>
+            字符串转化成 float
+            </summary>
+            <param name="obj">要转化的值</param>
+            <param name="defaultValue">如果转化失败，返回的默认值</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.StringExtention.ToDateTime(System.String)">
+            <summary>
+            字符串转化成 DateTime
+            </summary>
+            <param name="obj">要转化的值</param>
+            <returns>返回转换后值 可空</returns>
+        </member>
+        <member name="M:System.StringExtention.ToDateTime(System.String,System.DateTime)">
+            <summary>
+            字符串转化成 DateTime
+            </summary>
+            <param name="obj">要转化的值</param>
+            <param name="defaultValue">如果转化失败，返回的默认值</param>
+            <returns>返回转换后值 可空</returns>
+        </member>
+        <member name="M:System.StringExtention.ToBoolean(System.String)">
+            <summary>
+            转化成布尔类型
+            </summary>
+            <param name="str">要转化的值</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.StringExtention.ToBase64(System.String,System.Text.Encoding)">
+            <summary>
+            根据指定编码转化成对应的64位编码
+            </summary>
+            <param name="source">要转化的值</param>
+            <param name="encoding">编码类型</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.StringExtention.FromBase64(System.String,System.Text.Encoding)">
+            <summary>
+             从base64编码解码出正常的值
+            </summary>
+            <param name="baseString">base64编码</param>
+            <param name="encoding">编码类型</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.StringExtention.IsNull(System.String)">
+            <summary>
+            是否为空
+            </summary>
+            <param name="sourceStr"></param>
+            <returns></returns>
+        </member>
+        <member name="T:System.Threading.Tasks.TaskExtention">
+            <summary>
+              任务等待扩展
+            </summary>
+        </member>
+        <member name="M:System.Threading.Tasks.TaskExtention.WaitResult``1(System.Threading.Tasks.Task{``0})">
+            <summary>
+              等待异步执行结果
+            </summary>
+            <typeparam name="TResult"></typeparam>
+            <param name="task"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Threading.Tasks.TaskExtention.WaitResult``1(System.Threading.Tasks.Task{``0},System.Int32)">
+            <summary>
+            等待异步执行结果
+            </summary>
+            <typeparam name="TResult"></typeparam>
+            <param name="task"></param>
+            <param name="milliseconds">等待任务完成的毫秒数，-1,表示无限期等待</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Threading.Tasks.TaskExtention.WaitResult``1(System.Threading.Tasks.Task{``0},System.TimeSpan)">
+            <summary>
+            等待异步执行结果
+            </summary>
+            <param name="task"></param>
+            <param name="span">等待时间间隔</param>
+            <typeparam name="TResult"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:System.Threading.Tasks.TaskExtention.WaitResult``1(System.Threading.Tasks.Task{``0},System.Threading.CancellationToken)">
+            <summary>
+            等待异步执行结果
+            </summary>
+            <param name="task"></param>
+            <param name="token">等待任务完成期间要观察的取消标记</param>
+            <typeparam name="TResult"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:System.Threading.Tasks.TaskExtention.WaitResult``1(System.Threading.Tasks.Task{``0},System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            等待异步执行结果
+            </summary>
+            <param name="task"></param>
+            <param name="milliseconds">等待任务完成的毫秒数，-1,表示无限期等待</param>
+            <param name="token">等待任务完成期间要观察的取消标记</param>
+            <typeparam name="TResult"></typeparam>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

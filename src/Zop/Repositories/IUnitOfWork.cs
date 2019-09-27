@@ -19,7 +19,7 @@ namespace Zop.Repositories
         /// <summary>
         /// 提交当前的Unit Of Work事务。
         /// </summary>
-        bool Commit();
+        bool Commit(bool autoRollback = false);
         /// <summary>
         /// 回滚当前的 Unit Of Work事务。
         /// </summary>

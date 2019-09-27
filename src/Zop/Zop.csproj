@@ -2,13 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>4.0.2</Version>
+    <Version>4.0.3</Version>
     <Description>Zop 是 .Net Core DDD思想的开发框架</Description>
     <RootNamespace>Zop</RootNamespace>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>阿凌</Authors>
     <PackageProjectUrl>https://github.com/lfzm/Zop</PackageProjectUrl>
-    <PackageIconUrl>https://github.com/lfzm/Zop/logo.png</PackageIconUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/lfzm/Zop/master/logo.png</PackageIconUrl>
     <RepositoryUrl>https://github.com/lfzm/Zop</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
   </PropertyGroup>

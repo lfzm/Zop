@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
+using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Zop.Domain.Entities
@@ -17,6 +18,7 @@ namespace Zop.Domain.Entities
         /// </summary>
         [Key]
         [Required]
+        [DataMember]
         public virtual TPrimaryKey Id { get; protected set; }
 
         public TEntity Clone<TEntity>()

@@ -58,33 +58,6 @@
             <param name="value"></param>
             <returns></returns>
         </member>
-        <member name="T:Zop.DTO.DTOExtensions">
-            <summary>
-            Dto实体扩展
-            </summary>
-        </member>
-        <member name="M:Zop.DTO.DTOExtensions.IsValid(Zop.DTO.IRequestDto)">
-            <summary>
-            验证是否成功
-            </summary>
-            <param name="entity"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Zop.DTO.DTOExtensions.ValidResult(Zop.DTO.IRequestDto)">
-            <summary>
-            验证实体对象
-            </summary>
-            <param name="entity"></param>
-        </member>
-        <member name="M:Zop.DTO.DTOExtensions.IsValid(Zop.DTO.IRequestDto,Microsoft.Extensions.Logging.ILogger,Microsoft.Extensions.Logging.LogLevel)">
-            <summary>
-            验证是否成功
-            </summary>
-            <param name="entity">实体</param>
-            <param name="logger">日志记录</param>
-            <param name="logLevel">日志记录级别</param>
-            <returns></returns>
-        </member>
         <member name="T:Zop.DTO.IRequestDto">
             <summary>
             输入数据对象接口
@@ -127,6 +100,33 @@
             <summary>
             每页数量
             </summary>
+        </member>
+        <member name="T:Zop.DTOExtensions">
+            <summary>
+            Dto实体扩展
+            </summary>
+        </member>
+        <member name="M:Zop.DTOExtensions.IsValid(Zop.DTO.IRequestDto)">
+            <summary>
+            验证是否成功
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Zop.DTOExtensions.ValidResult(Zop.DTO.IRequestDto)">
+            <summary>
+            验证实体对象
+            </summary>
+            <param name="entity"></param>
+        </member>
+        <member name="M:Zop.DTOExtensions.IsValid(Zop.DTO.IRequestDto,Microsoft.Extensions.Logging.ILogger,Microsoft.Extensions.Logging.LogLevel)">
+            <summary>
+            验证是否成功
+            </summary>
+            <param name="entity">实体</param>
+            <param name="logger">日志记录</param>
+            <param name="logLevel">日志记录级别</param>
+            <returns></returns>
         </member>
         <member name="T:Zop.Domain.Entities.AggregateConcurrencySafe`1">
             <summary>
@@ -497,6 +497,11 @@
         <member name="P:System.Result.Success">
             <summary>
             执行是否成功
+            </summary>
+        </member>
+        <member name="P:System.Result.Failure">
+            <summary>
+            执行是否失败
             </summary>
         </member>
         <member name="P:System.Result.Code">

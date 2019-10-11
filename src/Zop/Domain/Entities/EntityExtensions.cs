@@ -1,7 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
+using Zop.Domain.Entities;
 using Zop.DTO;
 
-namespace Zop.Domain.Entities
+namespace Zop
 {
     /// <summary>
     /// Some useful extension methods for Entities.

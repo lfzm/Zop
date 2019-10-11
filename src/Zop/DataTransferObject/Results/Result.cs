@@ -31,6 +31,17 @@ namespace System
             }
         }
         /// <summary>
+        /// 执行是否失败
+        /// </summary>
+        [IgnoreDataMember]
+        public bool Failure
+        {
+            get
+            {
+                return this.Code != 200;
+            }
+        }
+        /// <summary>
         /// 业务返回码
         /// </summary>
         public int Code { get; set; }

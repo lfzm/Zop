@@ -1,7 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
+using Zop.DTO;
 
-namespace Zop.DTO
+namespace Zop
 {
     /// <summary>
     /// Dto实体扩展

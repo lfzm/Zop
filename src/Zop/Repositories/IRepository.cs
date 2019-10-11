@@ -23,6 +23,18 @@ namespace Zop.Repositories
         /// <returns></returns>
         Task<TEntity> GetAsync(TPrimaryKey id);
         /// <summary>
+        /// 修改实体
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        Task<TEntity> ModifyAsync(TEntity entity);
+        /// <summary>
+        /// Id 是否存在
+        /// </summary>
+        /// <param name="id">标识ID</param>
+        /// <returns></returns>
+        Task<bool> ExistAsync(TPrimaryKey id);
+        /// <summary>
         /// 添加实体
         /// </summary>
         /// <param name="entity">实体</param>
@@ -33,6 +45,8 @@ namespace Zop.Repositories
         /// </summary>
         /// <param name="primaryKey">实体唯一标识</param>
         /// <returns></returns>
-        Task RemoveAsync(TPrimaryKey primaryKey);
+        Task<bool> RemoveAsync(TPrimaryKey primaryKey);
+
+       
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Internal;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -62,7 +61,7 @@ namespace Zop.DTO
             EntityValidationResult result = ValidateEntity<T>(entity);
 
             if (result.HasError && logger != null)
-                logger.Log(logLevel, 0, new FormattedLogValues("{EntityType} Valid Fail Message:{error}", entity.GetType(), result.Errors), null, (object state, Exception error) =>
+                logger.Log(logLevel, 0, result.Errors, null, (object state, Exception error) =>
                 {
                     return state.ToString();
                 });

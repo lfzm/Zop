@@ -173,48 +173,6 @@
             乐观锁 版本号
             </summary>
         </member>
-        <member name="T:Zop.Domain.Entities.EntityExtensions">
-            <summary>
-            Some useful extension methods for Entities.
-            </summary>
-        </member>
-        <member name="M:Zop.Domain.Entities.EntityExtensions.IsNullOrDeleted(Zop.Domain.Entities.ISoftDelete)">
-            <summary>
-            检查这个实体是否被标记为已删除
-            </summary>
-        </member>
-        <member name="M:Zop.Domain.Entities.EntityExtensions.UnDelete(Zop.Domain.Entities.ISoftDelete)">
-             <summary>
-            取消删除实体
-             </summary>
-        </member>
-        <member name="M:Zop.Domain.Entities.EntityExtensions.Delete(Zop.Domain.Entities.ISoftDelete)">
-            <summary>
-            删除实体
-            </summary>
-            <param name="entity"></param>
-        </member>
-        <member name="M:Zop.Domain.Entities.EntityExtensions.OldVersionNo(Zop.Domain.Entities.IConcurrencySafe)">
-             <summary>
-            获取原来的乐观版本号
-             </summary>
-        </member>
-        <member name="M:Zop.Domain.Entities.EntityExtensions.IsValid``1(Zop.Domain.Entities.IEntity{``0})">
-            <summary>
-            验证是否成功
-            </summary>
-            <param name="entity"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Zop.Domain.Entities.EntityExtensions.IsValid``1(Zop.Domain.Entities.IEntity{``0},Microsoft.Extensions.Logging.ILogger,Microsoft.Extensions.Logging.LogLevel)">
-            <summary>
-            验证是否成功
-            </summary>
-            <param name="entity">实体</param>
-            <param name="logger">日志记录</param>
-            <param name="logLevel">日志记录级别</param>
-            <returns></returns>
-        </member>
         <member name="T:Zop.Domain.Entities.IAggregateRoot`1">
             <summary>
             聚合根接口
@@ -307,6 +265,48 @@
             是否相等
             </summary>
             <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Zop.EntityExtensions">
+            <summary>
+            Some useful extension methods for Entities.
+            </summary>
+        </member>
+        <member name="M:Zop.EntityExtensions.IsNullOrDeleted(Zop.Domain.Entities.ISoftDelete)">
+            <summary>
+            检查这个实体是否被标记为已删除
+            </summary>
+        </member>
+        <member name="M:Zop.EntityExtensions.UnDelete(Zop.Domain.Entities.ISoftDelete)">
+             <summary>
+            取消删除实体
+             </summary>
+        </member>
+        <member name="M:Zop.EntityExtensions.Delete(Zop.Domain.Entities.ISoftDelete)">
+            <summary>
+            删除实体
+            </summary>
+            <param name="entity"></param>
+        </member>
+        <member name="M:Zop.EntityExtensions.OldVersionNo(Zop.Domain.Entities.IConcurrencySafe)">
+             <summary>
+            获取原来的乐观版本号
+             </summary>
+        </member>
+        <member name="M:Zop.EntityExtensions.IsValid``1(Zop.Domain.Entities.IEntity{``0})">
+            <summary>
+            验证是否成功
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Zop.EntityExtensions.IsValid``1(Zop.Domain.Entities.IEntity{``0},Microsoft.Extensions.Logging.ILogger,Microsoft.Extensions.Logging.LogLevel)">
+            <summary>
+            验证是否成功
+            </summary>
+            <param name="entity">实体</param>
+            <param name="logger">日志记录</param>
+            <param name="logLevel">日志记录级别</param>
             <returns></returns>
         </member>
         <member name="T:Zop.Extensions.DependencyInjection.IKeyedServiceCollection`2">
@@ -407,6 +407,20 @@
         <member name="M:Zop.Repositories.IRepository`2.GetAsync(`1)">
             <summary>
             获取实体
+            </summary>
+            <param name="id">标识ID</param>
+            <returns></returns>
+        </member>
+        <member name="M:Zop.Repositories.IRepository`2.ModifyAsync(`0)">
+            <summary>
+            修改实体
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Zop.Repositories.IRepository`2.ExistAsync(`1)">
+            <summary>
+            Id 是否存在
             </summary>
             <param name="id">标识ID</param>
             <returns></returns>

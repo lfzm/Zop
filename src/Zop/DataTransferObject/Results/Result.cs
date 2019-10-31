@@ -1,4 +1,5 @@
 ﻿using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace System
@@ -22,7 +23,7 @@ namespace System
         /// <summary>
         /// 执行是否成功
         /// </summary>
-        [IgnoreDataMember]
+        [IgnoreDataMember, JsonIgnore]
         public bool Success
         {
             get
@@ -33,7 +34,7 @@ namespace System
         /// <summary>
         /// 执行是否失败
         /// </summary>
-        [IgnoreDataMember]
+        [IgnoreDataMember, JsonIgnore]
         public bool Failure
         {
             get

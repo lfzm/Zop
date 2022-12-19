@@ -57,10 +57,7 @@ namespace System
                       if (attr.Length > 0)
                           description = ((EnumDescriptAttribute)attr[0]).Description;
                       else
-                      {
-                          attr = enType.GetField(name).GetCustomAttributes(typeof(DescriptionAttribute), false);
-                          description = attr == null ? name : ((DescriptionAttribute)attr[0]).Description;
-                      }
+                          description = name;
                       dirs.Add(resultValue, description);
                   }
                   return dirs;
